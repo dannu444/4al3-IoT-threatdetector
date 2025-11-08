@@ -37,8 +37,8 @@ def main():
 
     df = pd.read_csv(args.file_path)
     input, target = preprocess(df)
-    input.to_csv(args.input_dest_path)
-    target.to_csv(args.target_dest_path)
+    input.to_csv(args.input_dest_path, index=False)
+    target.to_csv(args.target_dest_path, index=False)
 
 if __name__ == "__main__":
     main()
