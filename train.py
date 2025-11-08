@@ -38,13 +38,49 @@ class MultiLogisticRegression(nn.Module):
     def forward(self, x):
         return self.Linear(x)
     
+def calculate_full_loss(model, criterion, X, y):
+    model.eval()
+    with torch.no_grad():
+        outputs = model(X)
+        loss = criterion(outputs, y)
+    model.train()
 
+    return loss.item()
+
+def calculate_accuracy(model, X, y):
+    # not implemented!
+    pass
     
+def train_SGD(model, criterion, optimizer, X_train, y_train, X_val, y_val, iteration_num, batch_size, check_every):
 
-    
-def main():
-    my_model = GeneralNN(10, [20, 30, 40], 50)
-    print(my_model)
+    train_losses = []
+    val_losses = []
+    train_accs = []
+    val_accs = []
+    iterations = []
 
-if __name__ == "__main__":
-    main()
+    i = 0
+    instances = X_train.shape[0]
+
+    while (i <= iteration_num): 
+
+        #TODO: Shuffle dataset every epoch.
+
+        # train the model with batch
+        optimizer.zero_grad()
+        model_out = model(X_train[(i * batch_size) % instances : ((i * batch_size) % instances) + batch_size , :])
+        loss = criterion(model_out, y_train[(i * batch_size) % instances : ((i * batch_size) % instances) + batch_size])
+        loss.backward()
+        optimizer.step()
+
+        if (i % check_every == 0):
+            # compute full loss and add to list to plot.
+            train_losses.append(calculate_full_loss(model, criterion, X_train, y_train))
+            val_losses.append(calculate_full_loss(model, criterion, X_val, y_val))
+            train_accs.append(calculate_accuracy(model, X_train, y_train))
+            val_accs.append(calculate_accuracy(model, X_val, y_val))
+            iterations.append(i)
+
+        i += 1
+
+    return train_losses, val_losses, train_accs, val_accs, iterations
