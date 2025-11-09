@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import random
+import numpy as np
 
 from argparse import ArgumentParser # use to implement command line args for running baseline vs model.
 
@@ -47,29 +49,61 @@ def calculate_full_loss(model, criterion, X, y):
 
     return loss.item()
 
-def calculate_accuracy(model, X, y):
-    # not implemented!
-    pass
-    
+def calculate_f_score(model, X, y, num_classes):
+    # note; this expects the target matrix y to be processed
+    # with each class -> a number from [0 .. num_classes)
+
+    # get predictions
+    model.eval()
+    with torch.no_grad():
+        outputs = model(X)
+        predictions = torch.argmax(outputs, dim=1)
+    model.train()
+
+    scores = []
+    for cls in range(0, num_classes):
+        # calculate precision, recall, F score per class
+        true_pos = ((predictions == cls) & (y == cls)).sum().item()
+        false_pos = ((predictions == cls) & (y != cls)).sum().item()
+        false_neg = ((predictions != cls) & (y == cls)).sum().item()
+
+        precision = true_pos / (true_pos + false_pos) if (true_pos + false_pos) > 0 else 0
+        recall = true_pos / (true_pos + false_neg) if (true_pos + false_neg) > 0 else 0
+
+        score = (2*precision*recall) / (precision+recall) if (precision+recall) > 0 else 0
+        scores.append(score)
+
+    return sum(scores) / num_classes # avg scores to get macro F score.
+
 def train_SGD(model, criterion, optimizer, X_train, y_train, X_val, y_val, iteration_num, batch_size, check_every):
 
+    # init all returns
     train_losses = []
     val_losses = []
-    train_accs = []
-    val_accs = []
+    train_fs = []
+    val_fs = []
     iterations = []
 
+    # init vars for use within train loop
     i = 0
     instances = X_train.shape[0]
 
+    # create copies of train datasets for shuffling
+    X_train_shuf = X_train.clone()
+    y_train_shuf = y_train.clone()
+
     while (i <= iteration_num): 
 
-        #TODO: Shuffle dataset every epoch.
+        # shuffle dataset roughly every epoch
+        if (i % (instances // batch_size) == 0):
+            combined = list(zip(X_train_shuf, y_train_shuf))
+            random.shuffle(combined)
+            X_train_shuf, y_train_shuf = zip(*combined)
 
         # train the model with batch
         optimizer.zero_grad()
-        model_out = model(X_train[(i * batch_size) % instances : ((i * batch_size) % instances) + batch_size , :])
-        loss = criterion(model_out, y_train[(i * batch_size) % instances : ((i * batch_size) % instances) + batch_size])
+        model_out = model(X_train_shuf[(i * batch_size) % instances : ((i * batch_size) % instances) + batch_size , :])
+        loss = criterion(model_out, y_train_shuf[(i * batch_size) % instances : ((i * batch_size) % instances) + batch_size])
         loss.backward()
         optimizer.step()
 
@@ -77,10 +111,10 @@ def train_SGD(model, criterion, optimizer, X_train, y_train, X_val, y_val, itera
             # compute full loss and add to list to plot.
             train_losses.append(calculate_full_loss(model, criterion, X_train, y_train))
             val_losses.append(calculate_full_loss(model, criterion, X_val, y_val))
-            train_accs.append(calculate_accuracy(model, X_train, y_train))
-            val_accs.append(calculate_accuracy(model, X_val, y_val))
+            train_fs.append(calculate_f_score(model, X_train, y_train))
+            val_fs.append(calculate_f_score(model, X_val, y_val))
             iterations.append(i)
 
         i += 1
 
-    return train_losses, val_losses, train_accs, val_accs, iterations
+    return train_losses, val_losses, train_fs, val_fs, iterations
