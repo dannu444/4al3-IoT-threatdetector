@@ -30,5 +30,9 @@ def main():
     # Check correlation
     check_correlation(df, args.correlation_threshold)
 
+    # Print DataFrame Info
+    print("---------- DataFrame Info ----------")
+    df.info()
+
 if __name__ == "__main__":
     main()
