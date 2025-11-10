@@ -42,7 +42,7 @@ class MultiLogisticRegression(nn.Module):
         self.linear = nn.Linear(input_dim, output_dim)
 
     def forward(self, x):
-        return self.Linear(x)
+        return self.linear(x)
     
 def calculate_full_loss(model, criterion, X, y):
     model.eval()
@@ -61,8 +61,8 @@ def calculate_f_score(model, X, y):
         outputs = model(X)
     model.train()
 
-    y_true = torch.argmax(y).numpy()
-    y_pred = torch.argmax(outputs).numpy()
+    y_true = torch.argmax(y, dim=1).numpy()
+    y_pred = torch.argmax(outputs, dim=1).numpy()
 
     return f1_score(y_true, y_pred, average="macro")
 
