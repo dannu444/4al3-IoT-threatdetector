@@ -3,6 +3,9 @@ import torch.nn as nn
 import torch.optim as optim
 import random
 import numpy as np
+import pandas as pd
+from sklearn.metrics import f1_score
+from sklearn.utils import shuffle
 
 from argparse import ArgumentParser # use to implement command line args for running baseline vs model.
 
@@ -49,31 +52,18 @@ def calculate_full_loss(model, criterion, X, y):
 
     return loss.item()
 
-def calculate_f_score(model, X, y, num_classes):
-    # note; this expects the target matrix y to be processed
-    # with each class -> a number from [0 .. num_classes)
-
+def calculate_f_score(model, X, y):
     # get predictions
+    outputs = None
     model.eval()
     with torch.no_grad():
         outputs = model(X)
-        predictions = torch.argmax(outputs, dim=1)
     model.train()
 
-    scores = []
-    for cls in range(0, num_classes):
-        # calculate precision, recall, F score per class
-        true_pos = ((predictions == cls) & (y == cls)).sum().item()
-        false_pos = ((predictions == cls) & (y != cls)).sum().item()
-        false_neg = ((predictions != cls) & (y == cls)).sum().item()
+    y_true = torch.argmax(y).numpy()
+    y_pred = torch.argmax(outputs).numpy()
 
-        precision = true_pos / (true_pos + false_pos) if (true_pos + false_pos) > 0 else 0
-        recall = true_pos / (true_pos + false_neg) if (true_pos + false_neg) > 0 else 0
-
-        score = (2*precision*recall) / (precision+recall) if (precision+recall) > 0 else 0
-        scores.append(score)
-
-    return sum(scores) / num_classes # avg scores to get macro F score.
+    return f1_score(y_true, y_pred, average="macro")
 
 def train_SGD(model, criterion, optimizer, X_train, y_train, X_val, y_val, iteration_num, batch_size, check_every):
 
@@ -96,9 +86,9 @@ def train_SGD(model, criterion, optimizer, X_train, y_train, X_val, y_val, itera
 
         # shuffle dataset roughly every epoch
         if (i % (instances // batch_size) == 0):
-            combined = list(zip(X_train_shuf, y_train_shuf))
-            random.shuffle(combined)
-            X_train_shuf, y_train_shuf = zip(*combined)
+            X_train_np, y_train_np = shuffle(X_train_shuf.numpy(), y_train_shuf.numpy())
+            X_train_shuf = torch.tensor(X_train_np, dtype=torch.float32)
+            y_train_shuf = torch.tensor(y_train_np, dtype=torch.float32)
 
         # train the model with batch
         optimizer.zero_grad()
