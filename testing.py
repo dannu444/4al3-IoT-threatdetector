@@ -17,6 +17,12 @@ import train
 from argparse import ArgumentParser 
 from itertools import product
 
+def set_all_seeds(seed):
+        random.seed(seed)
+        np.random.seed(seed)
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+
 class Testing():
     def __init__(self):
 
@@ -48,11 +54,6 @@ class Testing():
         
         return hidden_dim
 
-    def set_all_seeds(self, seed):
-        random.seed(seed)
-        np.random.seed(seed)
-        torch.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed)
 
     def hyperparameter_tuning(self):
         hidden_candidates = [self.model_structure() for _ in range(20)] 
@@ -71,7 +72,8 @@ class Testing():
         for hidden_struct, bs, lr, iters in trial_set:
             trial_idx += 1
             idx = 1234 + trial_idx
-            self.set_all_seeds(idx)
+            set_all_seeds(idx)
+
             model = train.GeneralNN(self.input_dim, hidden_struct, self.output_dim)
             model = model.to(device)
             criterion = nn.CrossEntropyLoss()
@@ -93,6 +95,8 @@ class Testing():
                 "val_fs":       val_fs,
                 "iterations":   iterations,
             }
+
+
             
             print(f"[{trial_idx}] hs={hidden_struct} bs={bs} lr={lr} iters={iters} -> val_f1={final_val_f1:.4f}")
             if final_val_f1 > best["score"]:
@@ -104,6 +108,7 @@ class Testing():
         print(f"best FS score on validation data:   {best['score']:.4f}")
 
         return results, best
+    
             
     def best_each(self, results):
         best_bs = {}
@@ -143,19 +148,19 @@ class Testing():
         
         if (z == 1):
             axes[0,0].set_title('Train Loss from Top Batch Size Results', fontsize=14, fontweight='bold')
-            axes[0,1].set_title('Validation Loss from Top Batch Size Results', fontsize=14, fontweight='bold')
+            axes[0,1].set_title('Value Loss from Top Batch Size Results', fontsize=14, fontweight='bold')
             axes[1,0].set_title('Train FS from Top Batch Size Results', fontsize=14, fontweight='bold')
-            axes[1,1].set_title('Validation FS from Top Batch Size Results', fontsize=14, fontweight='bold')
+            axes[1,1].set_title('Value FS from Top Batch Size Results', fontsize=14, fontweight='bold')
         if (z == 2):
             axes[0,0].set_title('Train Loss from Top Max Iteration Results', fontsize=14, fontweight='bold')
-            axes[0,1].set_title('Validation Loss from Top Max Iteration Results', fontsize=14, fontweight='bold')
+            axes[0,1].set_title('Value Loss from Top Max Iteration Results', fontsize=14, fontweight='bold')
             axes[1,0].set_title('Train FS from Top Max Iteration Results', fontsize=14, fontweight='bold')
-            axes[1,1].set_title('Validation FS from Top Max Iteration Results', fontsize=14, fontweight='bold')
+            axes[1,1].set_title('Value FS from Top Max Iteration Results', fontsize=14, fontweight='bold')
         if (z == 3):
             axes[0,0].set_title('Train Loss from Top Max Iteration Results', fontsize=14, fontweight='bold')
-            axes[0,1].set_title('Validation Loss from Top Max Iteration Results', fontsize=14, fontweight='bold')
+            axes[0,1].set_title('Value Loss from Top Max Iteration Results', fontsize=14, fontweight='bold')
             axes[1,0].set_title('Train FS from Top Max Iteration Results', fontsize=14, fontweight='bold')
-            axes[1,1].set_title('Validation FS from Top Max Iteration Results', fontsize=14, fontweight='bold')
+            axes[1,1].set_title('Value FS from Top Max Iteration Results', fontsize=14, fontweight='bold')
 
         for ax in axes[0, :]: 
             ax.set_xlabel('Iterations')
@@ -171,8 +176,6 @@ class Testing():
 
         plt.tight_layout()
         plt.show()
-
-
         
 def main():
     parser = ArgumentParser()
@@ -190,6 +193,9 @@ def main():
     # Transfer input and target data to numpy arrays
     input = input.to_numpy()
     target = target.to_numpy()
+
+    #to ensure baseline remains consistent across trials
+    set_all_seeds(1234)
 
     # Shuffle input and target
     shuffle_index = np.random.permutation(input.shape[0])
@@ -225,15 +231,25 @@ def main():
 
     results, best = test.hyperparameter_tuning()
     test.best_each(results)
-
-    device  = torch.device("cpu")
-    model = train.GeneralNN(test.input_dim, best['cfg']['hidden'], test.output_dim)
-    model = model.to(device)
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=best['cfg']['lr'])
-    train.train_SGD(model, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, best['cfg']['iters'], best['cfg']['bs'], test.check_every)
     
-    final_test_f1 = train.calculate_f_score(model, X_test_t, y_test_t)
+    device  = torch.device("cpu")
+
+    #evaluation on baseline
+    model_base = train.MultiLogisticRegression(test.input_dim, test.output_dim)
+    model_base = model_base.to(device)
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model_base.parameters(), lr=0.1)
+    train.train_SGD(model_base, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, 10000, 64, test.check_every)
+    final_test_f1 = train.calculate_f_score(model_base, X_test_t, y_test_t)
+    print(f"accuracy on baseline model:          {final_test_f1:.4f}")
+    
+    #evaluation of accuracy on test set
+    model_eval = train.GeneralNN(test.input_dim, best['cfg']['hidden'], test.output_dim)
+    model_eval = model_eval.to(device)
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model_eval.parameters(), lr=best['cfg']['lr'])
+    train.train_SGD(model_eval, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, best['cfg']['iters'], best['cfg']['bs'], test.check_every)
+    final_test_f1 = train.calculate_f_score(model_eval, X_test_t, y_test_t)
     print(f"accuracy on testing data:           {final_test_f1:.4f}")
 
 if __name__ == "__main__":
