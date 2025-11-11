@@ -10,7 +10,6 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, make_score
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torch.multiprocessing as mp
 import random
 
 import train
@@ -20,6 +19,14 @@ from itertools import product
 
 class Testing():
     def __init__(self):
+
+        self.X_train = None
+        self.y_train = None
+        self.X_val = None
+        self.y_val = None
+        self.X_test = None
+        self.y_test = None
+
         self.input_dim = 83 
         self.output_dim = 13 
         self.check_every = 5000
@@ -92,11 +99,12 @@ class Testing():
                 best["score"] = final_val_f1
                 best["cfg"]   = {"hidden": hidden_struct, "bs": bs, "lr": lr, "iters": iters}
 
-        print(f"Best config: hs={best['cfg']['hidden']}  bs={best['cfg']['bs']}  lr={best['cfg']['lr']}  iters={best['cfg']['iters']}")
-        print(f"Best val F1: {best['score']:.4f}")
+        print("\n")
+        print(f"best configuration:                 hs={best['cfg']['hidden']}  bs={best['cfg']['bs']}  lr={best['cfg']['lr']}  iters={best['cfg']['iters']}")
+        print(f"best FS score on validation data:   {best['score']:.4f}")
+
         return results, best
             
-
     def best_each(self, results):
         best_bs = {}
         best_iter = {}
@@ -188,29 +196,45 @@ def main():
     input = input[shuffle_index]
     target = target[shuffle_index]
 
-    # Split data into training and validation
+    # Split data into training, validation and testing
     X_train = input[:80000, :]
-    X_val = input[80000:, :]
     y_train = target[:80000, :]
-    y_val = target[80000:, :]
+    X_val = input[80000:100000, :]
+    y_val = target[80000:100000, :]
+    X_test = input[100000:, :]
+    y_test = target[100000:, :]
 
     # Create tensors for data
     X_train_t = torch.tensor(X_train).float()
-    X_val_t = torch.tensor(X_val).float()
     y_train_t = torch.tensor(y_train).float()
+    X_val_t = torch.tensor(X_val).float()
     y_val_t = torch.tensor(y_val).float()
-
+    X_test_t = torch.tensor(X_test).float()
+    y_test_t = torch.tensor(y_test).float()
+    
     test = Testing()
-    test.input_dim  = X_train_t.shape[1]   # fixes the 83 vs 91 mismatch
+    test.input_dim  = X_train_t.shape[1]
     test.output_dim = y_train.shape[1]
 
     test.X_train = X_train_t
     test.y_train = y_train_t
     test.X_val = X_val_t
     test.y_val = y_val_t
+    test.X_val = X_test_t
+    test.y_val = y_test_t
 
     results, best = test.hyperparameter_tuning()
     test.best_each(results)
+
+    device  = torch.device("cpu")
+    model = train.GeneralNN(test.input_dim, best['cfg']['hidden'], test.output_dim)
+    model = model.to(device)
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=best['cfg']['lr'])
+    train.train_SGD(model, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, best['cfg']['iters'], best['cfg']['bs'], test.check_every)
+    
+    final_test_f1 = train.calculate_f_score(model, X_test_t, y_test_t)
+    print(f"accuracy on testing data:           {final_test_f1:.4f}")
 
 if __name__ == "__main__":
     main()
