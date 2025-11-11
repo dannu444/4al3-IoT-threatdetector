@@ -37,16 +37,16 @@
 
 \section{Introduction}
 
-The Internet of Things (IoT) encapsulates a network of numerous interconnected devices and technologies, facilitating real-time communication and data sharing. In this field, a major concern is the identification of malicious network traffic, an issue only growing in scale as time goes on. IoT connected devices are becoming extremely popular with a predicted 29 billion IoT connected devices by 2030 [1].However, due to network complexities as well as the diverse technologies and communication channels integrated through the system, there are many possible areas of weakness that leave IoT devices susceptible to cyber-attacks and malicious activity. Almost all IoT systems are at risk of attack, regardless of the active security measures put into place.
+The Internet of Things (IoT) encapsulates a network of numerous interconnected devices and technologies, facilitating real-time communication and data sharing. In this field, a major concern is the identification of malicious network traffic, an issue only growing in scale as time goes on. IoT connected devices are becoming extremely popular with a predicted 29 billion IoT connected devices by 2030 \citep{ref1}.However, due to network complexities as well as the diverse technologies and communication channels integrated through the system, there are many possible areas of weakness that leave IoT devices susceptible to cyber-attacks and malicious activity. Almost all IoT systems are at risk of attack, regardless of the active security measures put into place.
 
-As a means of risk mitigation, this project aims to classify network traffic as one of 12 different classes including 9 malicious behaviors and 3 benign behaviors. Such a classifier can be used within Intrusion Detection Systems (IDSs), resulting in more robust and adaptive security for IoT networks [2]. Many such IoT network monitoring applications exist, either as software bundled with the purchase of a related IoT device, or as standalone applications. These applications tend to focus on not only security, but other important statistics including device performance, health, and availability [3]. Our solution will focus purely on identifying and intercepting possible attacks.
+As a means of risk mitigation, this project aims to classify network traffic as one of 12 different classes including 9 malicious behaviors and 3 benign behaviors. Such a classifier can be used within Intrusion Detection Systems (IDSs), resulting in more robust and adaptive security for IoT networks \citep{ref2}. Many such IoT network monitoring applications exist, either as software bundled with the purchase of a related IoT device, or as standalone applications. These applications tend to focus on not only security, but other important statistics including device performance, health, and availability \citep{ref3}. Our solution will focus purely on identifying and intercepting possible attacks.
 
 \section{Related Work}
 
-We have identified two main papers that aim to complete the same task as our project. Saba et.al focus on applying Convolutional Neural Networks (CNNs) to anomaly-based intrusion detection systems, arguing that deep learning's pattern matching abilities are superior to the more traditional machine learning techniques used to find anomalies in IoT infrastructure [4]. 
-Sharmila et.al, the creators of the dataset we plan to employ, utilize Vector-quantized Variational Auto-encoders (VQAEs) as their model of choice. The major argument they make against the above approach is incompatibility with the limited processing power of most IoT devices. They propose QAEs as a superior model, also utilizing an anomaly-based detection approach [5]. 
-Rahman et.al work on a similar problem in the field of IoT – device classification, a task becoming ever-difficult as IoT device popularity grows and an increasing number of devices are created. The group created an extensive new data set and evaluated various models, with Random Forest performing the best [6].
-Two other papers that work on similar problems in classifying general internet traffic are discussed as follows. Fesl et.al work on classifying both the protocol and content of VPN traffic, experimenting with Recurrent Neural Networks (RNNs) amongst other methods to classify packets [7]. They experience some success, but Random Forest still outperforms on their dataset; this may or may not indicate their success with classifying IoT traffic. Lastly, Latif-Martinez et.al produce a novel approach for anomaly detection in general network monitoring with a modified version of Graph Neural Networks (GNNs), which exhibits considerable performance increases on benchmark data sets [8].
+We have identified two main papers that aim to complete the same task as our project. Saba et.al focus on applying Convolutional Neural Networks (CNNs) to anomaly-based intrusion detection systems, arguing that deep learning's pattern matching abilities are superior to the more traditional machine learning techniques used to find anomalies in IoT infrastructure \citep{ref4}. 
+Sharmila et.al, the creators of the dataset we plan to employ, utilize Vector-quantized Variational Auto-encoders (VQAEs) as their model of choice. The major argument they make against the above approach is incompatibility with the limited processing power of most IoT devices. They propose QAEs as a superior model, also utilizing an anomaly-based detection approach \citep{ref5}. 
+Rahman et.al work on a similar problem in the field of IoT – device classification, a task becoming ever-difficult as IoT device popularity grows and an increasing number of devices are created. The group created an extensive new data set and evaluated various models, with Random Forest performing the best \citep{ref6}.
+Two other papers that work on similar problems in classifying general internet traffic are discussed as follows. Fesl et.al work on classifying both the protocol and content of VPN traffic, experimenting with Recurrent Neural Networks (RNNs) amongst other methods to classify packets \citep{ref7}. They experience some success, but Random Forest still outperforms on their dataset; this may or may not indicate their success with classifying IoT traffic. Lastly, Latif-Martinez et.al produce a novel approach for anomaly detection in general network monitoring with a modified version of Graph Neural Networks (GNNs), which exhibits considerable performance increases on benchmark data sets \citep{ref8}.
 
 \section{Dataset}
 
@@ -80,7 +80,7 @@ In total, the list of model hyperparameters available to be experimented with ar
 
 For each specified hyperparameters, a specific range of hyperparameter values was chosen as possible options. The itertools import from Python was then used to create a Cartesian product that contained all possible combinations of the possible hyperparameter values. A random sample of ~ 50 combinations was then chosen in order to conduct random search. Due to the large amount of data and high computational demands of training the model, random search was chosen over grid search to avoid excessively long and demanding computations during hyperparameter tuning.
 
-We have two baselines for comparison. The first is a simple linear regression model, with an identical loss function and optimization method as described above. Outperforming this baseline would demonstrate that the added complexity of multiple non-linear layers is necessary for accurately solving the problem. A second baseline is a naïve model that always predicts the most common class within the training dataset. This is used to ensure that the model is performing better than simply guessing what is most frequent in the dataset.
+Our primary baseline is a simple linear regression model, with an identical loss function and optimization method as described above. Outperforming this baseline would demonstrate that the added complexity of multiple non-linear layers is necessary for accurately solving the problem.
 
 \section{Results and Evaluation}
 
@@ -109,13 +109,13 @@ batch size: 128 \\
 learning rate: 0.1 \\
 max iteration count: 50000
 
-After applying these hyperparameters and training the model, the following results were concluded, where accuracy is determined based on the final FS score:
+After applying these hyperparameters and training the model, the following results were concluded, where accuracy is determined using the final F-score:
 
 accuracy on validation data:   0.9453 \\
 accuracy on baseline model:    0.8956 \\
 accuracy on testing data:      0.9477
 
-The graphs generated for the above results can be found in Figures ~\ref{fig:experiments} through ~\ref{fig:experiments} in the appendix.
+The graphs generated for the above results can be found in Figures ~\ref{fig:graph1} through ~\ref{fig:graph12} in the appendix.
 
 One notable consideration when viewing the graphs generated by the program is how final values are shown when there are different iteration counts. Certain lines have shorter iteration counters and therefore stop earlier in the graph. To provide better visualization in regard to how the final values compare to each other, the final value that is noted at the last iteration is extended at a flat rate to the iteration value of 50000.
 
@@ -134,17 +134,6 @@ Another piece of feedback we received was based on our feature engineering proce
 A third piece of feedback we received was related to how to determine the number and size of layers we should have in our neural network. The TA suggested experimenting with different sizes and number of layers using hyperparameter searching to find what works best. We have implemented this as described in Results and Evaluation.
 
 After initial evaluation of our model and baseline, we have seen very promising performance. One main concern we have, however, is bias in the dataset making it easier to predict correctly. Namely, one target class makes up 76.9\% of the dataset, and as such, if the model is in doubt, it can choose this class and be right much more frequently than if the classes were uniformly distributed. As a next step, we plan to remove instances of the dataset to get a more uniform distribution of target classes to see how that affects the models' performance.
-
-\section{Template Notes}
-
-\subsection{References}
-
-\nocite{Ando2005,andrew2007scalable,rasooli-tetrault-2015}
-
-Many websites where you can find academic papers also allow you to export a bib file for citation or bib formatted entry. Copy this into the \texttt{custom.bib} and you will be able to cite the paper in the \LaTeX{}. You can remove the example entries.
-
-
-% \section*{Limitations}
 
 \section*{Team Contributions}
 
@@ -169,7 +158,6 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
 % Bibliography entries for the entire Anthology, followed by custom entries
 %\bibliography{custom,anthology-overleaf-1,anthology-overleaf-2}
 
-% Custom bibliography entries only
 \bibliography{custom}
 
 % \appendix

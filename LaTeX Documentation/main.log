@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.18)  11 NOV 2025 16:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.18)  11 NOV 2025 17:05
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -409,83 +409,76 @@ Package microtype Info: Loading generic protrusion settings for font family
 ]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [2]
-
-LaTeX Warning: Reference `fig:experiments' on page 3 undefined on input line 118.
-
-
-LaTeX Warning: Reference `fig:experiments' on page 3 undefined on input line 118.
-
-[3]
-LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.95pt on input line 144.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 144.
-
+ [2] [3]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- (./main.bbl) [4]
-<figures/graph1.png, id=107, 697.60625pt x 397.98688pt>
+ (./main.bbl
+Underfull \hbox (badness 1515) in paragraph at lines 20--23
+[]\T1/ptm/m/n/10 (+20) H. Latif-Martínez, J. Suárez-Varela, A. Cabellos-
+ []
+
+) [4]
+<figures/graph1.png, id=130, 697.60625pt x 397.98688pt>
 File: figures/graph1.png Graphic file (type png)
 <use figures/graph1.png>
-Package pdftex.def Info: figures/graph1.png  used on input line 184.
+Package pdftex.def Info: figures/graph1.png  used on input line 172.
 (pdftex.def)             Requested size: 197.17618pt x 112.48615pt.
-<figures/graph2.png, id=109, 693.08937pt x 388.95313pt>
+<figures/graph2.png, id=132, 694.595pt x 392.96812pt>
 File: figures/graph2.png Graphic file (type png)
 <use figures/graph2.png>
-Package pdftex.def Info: figures/graph2.png  used on input line 191.
-(pdftex.def)             Requested size: 197.17618pt x 110.651pt.
-<figures/graph3.png, id=110, 695.09688pt x 383.4325pt>
+Package pdftex.def Info: figures/graph2.png  used on input line 179.
+(pdftex.def)             Requested size: 197.17618pt x 111.55334pt.
+<figures/graph3.png, id=133, 695.09688pt x 383.4325pt>
 File: figures/graph3.png Graphic file (type png)
 <use figures/graph3.png>
-Package pdftex.def Info: figures/graph3.png  used on input line 198.
+Package pdftex.def Info: figures/graph3.png  used on input line 186.
 (pdftex.def)             Requested size: 197.17618pt x 108.76453pt.
-<figures/graph4.png, id=111, 695.09688pt x 388.45125pt>
+<figures/graph4.png, id=134, 696.10063pt x 395.4775pt>
 File: figures/graph4.png Graphic file (type png)
 <use figures/graph4.png>
-Package pdftex.def Info: figures/graph4.png  used on input line 205.
-(pdftex.def)             Requested size: 197.17618pt x 110.18814pt.
-<figures/graph5.png, id=112, 700.11563pt x 390.96063pt>
+Package pdftex.def Info: figures/graph4.png  used on input line 193.
+(pdftex.def)             Requested size: 197.17618pt x 112.01828pt.
+<figures/graph5.png, id=135, 700.11563pt x 390.96063pt>
 File: figures/graph5.png Graphic file (type png)
 <use figures/graph5.png>
-Package pdftex.def Info: figures/graph5.png  used on input line 214.
+Package pdftex.def Info: figures/graph5.png  used on input line 202.
 (pdftex.def)             Requested size: 197.17618pt x 110.10654pt.
-<figures/graph6.png, id=113, 697.10437pt x 395.4775pt>
+<figures/graph6.png, id=136, 688.07062pt x 388.45125pt>
 File: figures/graph6.png Graphic file (type png)
 <use figures/graph6.png>
-Package pdftex.def Info: figures/graph6.png  used on input line 221.
-(pdftex.def)             Requested size: 197.17618pt x 111.86139pt.
-<figures/graph7.png, id=114, 694.09312pt x 388.45125pt>
+Package pdftex.def Info: figures/graph6.png  used on input line 209.
+(pdftex.def)             Requested size: 197.17618pt x 111.31433pt.
+<figures/graph7.png, id=137, 694.09312pt x 388.45125pt>
 File: figures/graph7.png Graphic file (type png)
 <use figures/graph7.png>
-Package pdftex.def Info: figures/graph7.png  used on input line 228.
+Package pdftex.def Info: figures/graph7.png  used on input line 216.
 (pdftex.def)             Requested size: 197.17618pt x 110.34818pt.
-<figures/graph8.png, id=115, 697.60625pt x 392.46625pt>
+<figures/graph8.png, id=138, 696.6025pt x 392.96812pt>
 File: figures/graph8.png Graphic file (type png)
 <use figures/graph8.png>
-Package pdftex.def Info: figures/graph8.png  used on input line 235.
-(pdftex.def)             Requested size: 197.17618pt x 110.92581pt.
+Package pdftex.def Info: figures/graph8.png  used on input line 223.
+(pdftex.def)             Requested size: 197.17618pt x 111.22955pt.
  [5 <./figures/graph1.png> <./figures/graph2.png> <./figures/graph3.png> <./figures/graph4.png> <./figures/graph5.png> <./figures/graph6.png> <./figures/graph7.png> <./figures/graph8.png>]
-<figures/graph9.png, id=136, 694.595pt x 392.46625pt>
+<figures/graph9.png, id=159, 694.595pt x 392.46625pt>
 File: figures/graph9.png Graphic file (type png)
 <use figures/graph9.png>
-Package pdftex.def Info: figures/graph9.png  used on input line 244.
+Package pdftex.def Info: figures/graph9.png  used on input line 232.
 (pdftex.def)             Requested size: 197.17618pt x 111.41087pt.
-<figures/graph10.png, id=137, 698.61pt x 392.46625pt>
+<figures/graph10.png, id=160, 693.59125pt x 388.95313pt>
 File: figures/graph10.png Graphic file (type png)
 <use figures/graph10.png>
-Package pdftex.def Info: figures/graph10.png  used on input line 251.
-(pdftex.def)             Requested size: 197.17618pt x 110.77011pt.
-<figures/graph11.png, id=138, 697.60625pt x 392.96812pt>
+Package pdftex.def Info: figures/graph10.png  used on input line 239.
+(pdftex.def)             Requested size: 197.17618pt x 110.57384pt.
+<figures/graph11.png, id=161, 697.60625pt x 392.96812pt>
 File: figures/graph11.png Graphic file (type png)
 <use figures/graph11.png>
-Package pdftex.def Info: figures/graph11.png  used on input line 258.
+Package pdftex.def Info: figures/graph11.png  used on input line 246.
 (pdftex.def)             Requested size: 197.17618pt x 111.06766pt.
-<figures/graph12.png, id=139, 694.595pt x 391.96437pt>
+<figures/graph12.png, id=162, 694.595pt x 388.95313pt>
 File: figures/graph12.png Graphic file (type png)
 <use figures/graph12.png>
-Package pdftex.def Info: figures/graph12.png  used on input line 265.
-(pdftex.def)             Requested size: 197.17618pt x 111.26842pt.
+Package pdftex.def Info: figures/graph12.png  used on input line 253.
+(pdftex.def)             Requested size: 197.17618pt x 110.4136pt.
  [6
 
  <./figures/graph9.png> <./figures/graph10.png> <./figures/graph11.png> <./figures/graph12.png>] (./main.aux)
@@ -493,26 +486,22 @@ Package pdftex.def Info: figures/graph12.png  used on input line 265.
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 60EFCFB09EFE0227E59B18AD68701AA9;2486.
+(rerunfilecheck)             Checksum: BEC27BE344821C94F2D8BAD2CE206A5A;2261.
  ) 
 Here is how much of TeX's memory you used:
- 14082 strings out of 474116
- 227252 string characters out of 5743682
- 1944187 words of memory out of 5000000
- 36023 multiletter control sequences out of 15000+600000
- 593901 words of font info for 194 fonts, out of 8000000 for 9000
+ 14076 strings out of 474116
+ 226923 string characters out of 5743682
+ 1945187 words of memory out of 5000000
+ 36022 multiletter control sequences out of 15000+600000
+ 589977 words of font info for 184 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  90i,10n,93p,1090b,447s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (6 pages, 1605966 bytes).
+Output written on main.pdf (6 pages, 1619469 bytes).
 PDF statistics:
- 186 PDF objects out of 1000 (max. 8388607)
- 144 compressed objects within 2 object streams
- 43 named destinations out of 1000 (max. 500000)
- 36053 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 207 PDF objects out of 1000 (max. 8388607)
+ 165 compressed objects within 2 object streams
+ 46 named destinations out of 1000 (max. 500000)
+ 30917 words of extra memory for PDF output out of 35830 (max. 10000000)
 

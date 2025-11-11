@@ -9,44 +9,51 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Database file #1: custom.bib
-You've used 3 entries,
+Warning--entry type for "ref1" isn't style-file defined
+--line 3 of file custom.bib
+Warning--entry type for "ref2" isn't style-file defined
+--line 12 of file custom.bib
+Warning--entry type for "ref3" isn't style-file defined
+--line 21 of file custom.bib
+You've used 8 entries,
             3764 wiz_defined-function locations,
-            758 strings with 6306 characters,
-and the built_in function-call counts, 2132 in all, are:
-= -- 199
-> -- 68
-< -- 4
-+ -- 26
-- -- 19
-* -- 127
-:= -- 328
-add.period$ -- 13
-call.type$ -- 3
-change.case$ -- 24
-chr.to.int$ -- 4
-cite$ -- 3
-duplicate$ -- 134
-empty$ -- 164
-format.name$ -- 33
-if$ -- 470
+            780 strings with 7193 characters,
+and the built_in function-call counts, 4938 in all, are:
+= -- 438
+> -- 222
+< -- 5
++ -- 90
+- -- 64
+* -- 296
+:= -- 790
+add.period$ -- 32
+call.type$ -- 8
+change.case$ -- 64
+chr.to.int$ -- 9
+cite$ -- 8
+duplicate$ -- 299
+empty$ -- 356
+format.name$ -- 89
+if$ -- 1076
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 28
-newline$ -- 20
-num.names$ -- 12
-pop$ -- 62
+missing$ -- 63
+newline$ -- 44
+num.names$ -- 32
+pop$ -- 155
 preamble$ -- 1
-purify$ -- 18
+purify$ -- 53
 quote$ -- 0
-skip$ -- 122
+skip$ -- 287
 stack$ -- 0
-substring$ -- 92
-swap$ -- 70
-text.length$ -- 1
+substring$ -- 116
+swap$ -- 138
+text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 27
+type$ -- 72
 warning$ -- 0
-while$ -- 14
+while$ -- 26
 width$ -- 0
-write$ -- 44
+write$ -- 103
+(There were 3 warnings)
