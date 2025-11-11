@@ -197,12 +197,12 @@ def main():
     target = target[shuffle_index]
 
     # Split data into training, validation and testing
-    X_train = input[:80000, :]
-    y_train = target[:80000, :]
-    X_val = input[80000:100000, :]
-    y_val = target[80000:100000, :]
-    X_test = input[100000:, :]
-    y_test = target[100000:, :]
+    X_train = input[:98000, :]
+    y_train = target[:98000, :]
+    X_val = input[98000:110000, :]
+    y_val = target[98000:110000, :]
+    X_test = input[110000:, :]
+    y_test = target[110000:, :]
 
     # Create tensors for data
     X_train_t = torch.tensor(X_train).float()
