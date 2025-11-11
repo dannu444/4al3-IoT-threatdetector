@@ -148,19 +148,19 @@ class Testing():
         
         if (z == 1):
             axes[0,0].set_title('Train Loss from Top Batch Size Results', fontsize=14, fontweight='bold')
-            axes[0,1].set_title('Value Loss from Top Batch Size Results', fontsize=14, fontweight='bold')
+            axes[0,1].set_title('Validation Loss from Top Batch Size Results', fontsize=14, fontweight='bold')
             axes[1,0].set_title('Train FS from Top Batch Size Results', fontsize=14, fontweight='bold')
-            axes[1,1].set_title('Value FS from Top Batch Size Results', fontsize=14, fontweight='bold')
+            axes[1,1].set_title('Validation FS from Top Batch Size Results', fontsize=14, fontweight='bold')
         if (z == 2):
             axes[0,0].set_title('Train Loss from Top Max Iteration Results', fontsize=14, fontweight='bold')
-            axes[0,1].set_title('Value Loss from Top Max Iteration Results', fontsize=14, fontweight='bold')
+            axes[0,1].set_title('Validation Loss from Top Max Iteration Results', fontsize=14, fontweight='bold')
             axes[1,0].set_title('Train FS from Top Max Iteration Results', fontsize=14, fontweight='bold')
-            axes[1,1].set_title('Value FS from Top Max Iteration Results', fontsize=14, fontweight='bold')
+            axes[1,1].set_title('Validation FS from Top Max Iteration Results', fontsize=14, fontweight='bold')
         if (z == 3):
             axes[0,0].set_title('Train Loss from Top Learning Rate Results', fontsize=14, fontweight='bold')
-            axes[0,1].set_title('Value Loss from Top Learning Rate Results', fontsize=14, fontweight='bold')
+            axes[0,1].set_title('Validation Loss from Top Learning Rate Results', fontsize=14, fontweight='bold')
             axes[1,0].set_title('Train FS from Top Learning Rate Results', fontsize=14, fontweight='bold')
-            axes[1,1].set_title('Value FS from Top Learning Rate Results', fontsize=14, fontweight='bold')
+            axes[1,1].set_title('Validation FS from Top Learning Rate Results', fontsize=14, fontweight='bold')
 
         for ax in axes[0, :]: 
             ax.set_xlabel('Iterations')
