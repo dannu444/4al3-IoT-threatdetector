@@ -238,16 +238,16 @@ def main():
     optimizer = optim.SGD(model_base.parameters(), lr=0.1)
     train.train_SGD(model_base, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, 10000, 64, test.check_every)
     final_test_f1 = train.calculate_f_score(model_base, X_test_t, y_test_t)
-    print(f"accuracy on baseline model:          {final_test_f1:.4f}")
+    print(f"f-score on baseline model:          {final_test_f1:.4f}")
     
-    #evaluation of accuracy on test set
+    #evaluation of f-score on test set
     model_eval = train.GeneralNN(test.input_dim, best['cfg']['hidden'], test.output_dim)
     model_eval = model_eval.to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model_eval.parameters(), lr=best['cfg']['lr'])
     train.train_SGD(model_eval, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, best['cfg']['iters'], best['cfg']['bs'], test.check_every)
     final_test_f1 = train.calculate_f_score(model_eval, X_test_t, y_test_t)
-    print(f"accuracy on testing data:           {final_test_f1:.4f}")
+    print(f"f-score on testing data:           {final_test_f1:.4f}")
 
 if __name__ == "__main__":
     main()
