@@ -1,0 +1,44 @@
+\begin{thebibliography}{8}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Cooper(2025)}]{ref3}
+S.~Cooper. 2025.
+\newblock \href {https://www.comparitech.com/net-admin/iot-device-monitoring/} {The best iot device monitoring tools}.
+\newblock Accessed 7 October 2025.
+
+\bibitem[{Fesl and Naas(2025)}]{ref7}
+J.~Fesl and M.~Naas. 2025.
+\newblock A comprehensive machine learning-based approach for virtual private network traffic detection, classification and hiding.
+\newblock \emph{Computer Networks}, 270.
+
+\bibitem[{Katigbak(2025)}]{ref1}
+R.~Katigbak. 2025.
+\newblock \href {https://www.ibm.com/think/topics/eot-for-telecommunications} {The economy of things: The next value lever for telcos}.
+\newblock Accessed 7 October 2025.
+
+\bibitem[{Latif-Mart{\'i}nez et~al.(2025)Latif-Mart{\'i}nez, Su{\'a}rez-Varela, Cabellos-Aparicio, and Barlet-Ros}]{ref8}
+H.~Latif-Mart{\'i}nez, J.~Su{\'a}rez-Varela, A.~Cabellos-Aparicio, and P.~Barlet-Ros. 2025.
+\newblock Gat-ad: Graph attention networks for contextual anomaly detection in network monitoring.
+\newblock \emph{Computers \& Industrial Engineering}, 200.
+
+\bibitem[{Rahman et~al.(2025)Rahman, Bouhafs, Hoseini, and den Hartog}]{ref6}
+M.~M. Rahman, F.~Bouhafs, S.~A. Hoseini, and F.~den Hartog. 2025.
+\newblock Unsw homenet: A network traffic flow dataset for ai-based smart home device classification.
+\newblock \emph{Computers \& Industrial Engineering}, 204.
+
+\bibitem[{Saba et~al.(2024)Saba, Rehman, Sadad, Kolivand, and Bahaj}]{ref4}
+T.~Saba, A.~Rehman, T.~Sadad, H.~Kolivand, and S.~A. Bahaj. 2024.
+\newblock \href {https://www.sciencedirect.com/science/article/pii/S2666827024000483} {Anomaly-based intrusion detection system for iot networks through deep learning model}.
+\newblock \emph{Journal of Network and Computer Applications}.
+
+\bibitem[{Sharmila and Nagapadma(2023)}]{ref5}
+B.~Sharmila and R.~Nagapadma. 2023.
+\newblock Quantized autoencoder (qae) intrusion detection system for anomaly detection in resource-constrained iot devices using rt-iot2022 dataset.
+\newblock \emph{Cybersecurity}, 6:1--15.
+
+\bibitem[{Sharmila and Nagapadma(2024)}]{ref2}
+B.~S. Sharmila and R.~Nagapadma. 2024.
+\newblock \href {https://archive.ics.uci.edu/dataset/942/rt-iot2022} {Rt-iot2022 dataset}.
+\newblock Accessed 27 September 2025.
+
+\end{thebibliography}
