@@ -6,6 +6,7 @@
 \usepackage{times}
 \usepackage{latexsym}
 \usepackage{parskip}
+\usepackage{float}
 \setlength{\parskip}{6pt} 
 
 % For proper rendering and hyphenation of words containing Latin characters (including in bib files)
@@ -173,45 +174,98 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
 
 % \appendix
 
+\newpage
 \section{Appendix}
 \label{sec:appendix}
 
-This is an appendix.
-\begin{figure}[t]
-  \includegraphics[width=\columnwidth]{example-image-golden}
-  \caption{A figure with a caption that runs for more than one line.
-    Example image is usually available through the \texttt{mwe} package
-    without even mentioning it in the preamble.}
-  \label{fig:experiments}
+Figures 1 through 4 present top-performing model configurations identified at each tested batch size: 64, 128, and 256. 
+
+\begin{figure}[H]
+  \includegraphics[width=0.9\columnwidth]{figures/graph1.png}
+  \caption{Training loss for top-performing model configurations across batch sizes.}
+  \label{fig:graph1}
 \end{figure}
+\vspace{-4pt} 
 
-This is an appendix.
-\begin{figure}[t]
-  \includegraphics[width=\columnwidth]{example-image-golden}
-  \caption{A figure with a caption that runs for more than one line.
-    Example image is usually available through the \texttt{mwe} package
-    without even mentioning it in the preamble.}
-  \label{fig:experiments}
+\begin{figure}[H]
+  \includegraphics[width=0.9\columnwidth]{figures/graph2.png}
+  \caption{Value loss for top-performing model configurations across batch sizes.}
+  \label{fig:graph2}
 \end{figure}
+\vspace{-4pt} 
 
-This is an appendix.
-\begin{figure}[t]
-  \includegraphics[width=\columnwidth]{example-image-golden}
-  \caption{A figure with a caption that runs for more than one line.
-    Example image is usually available through the \texttt{mwe} package
-    without even mentioning it in the preamble.}
-  \label{fig:experiments}
+\begin{figure}[H]
+  \includegraphics[width=0.9\columnwidth]{figures/graph3.png}
+  \caption{Training FS score for top-performing model configurations across batch sizes.}
+  \label{fig:graph3}
 \end{figure}
+\vspace{-4pt} 
 
-This is an appendix.
-\begin{figure}[t]
-  \includegraphics[width=\columnwidth]{example-image-golden}
-  \caption{A figure with a caption that runs for more than one line.
-    Example image is usually available through the \texttt{mwe} package
-    without even mentioning it in the preamble.}
-  \label{fig:experiments}
+\begin{figure}[H]
+  \includegraphics[width=0.9\columnwidth]{figures/graph4.png}
+  \caption{Validation FS score for top-performing model configurations across batch sizes.}
+  \label{fig:graph4}
 \end{figure}
+\vspace{-4pt} 
 
+Figures 5 through 8 present top-performing model configurations identified at each learning rate: 1e-1, 5e-2, 1e-2, 5e-3 
 
+\begin{figure}[H]
+  \includegraphics[width=0.9\columnwidth]{figures/graph5.png}
+  \caption{Training loss for top-performing model configurations across learning rates.}
+  \label{fig:graph5}
+\end{figure}
+\vspace{-4pt} 
+
+\begin{figure}[H]
+  \includegraphics[width=0.9\columnwidth]{figures/graph6.png}
+  \caption{Value loss for top-performing model configurations across learning rates.}
+  \label{fig:graph6}
+\end{figure}
+\vspace{-4pt} 
+
+\begin{figure}[H]
+  \includegraphics[width=0.9\columnwidth]{figures/graph7.png}
+  \caption{Training FS score for top-performing model configurations across learning rates.}
+  \label{fig:graph7}
+\end{figure}
+\vspace{-4pt} 
+
+\begin{figure}[H]
+  \includegraphics[width=0.9\columnwidth]{figures/graph8.png}
+  \caption{Validation FS score for top-performing model configurations across learning rates.}
+  \label{fig:graph8}
+\end{figure}
+\vspace{-4pt} 
+
+Figure 9 through 12 present top-performing model configurations identified at each maximum iteration count: 2000, 5000, 10000, 50000
+
+\begin{figure}[H]
+  \includegraphics[width=0.9\columnwidth]{figures/graph9.png}
+  \caption{Training loss for top-performing model configurations across max iteration counts.}
+  \label{fig:graph9}
+\end{figure}
+\vspace{-4pt} 
+
+\begin{figure}[H]
+  \includegraphics[width=0.9\columnwidth]{figures/graph10.png}
+  \caption{Value loss for top-performing model configurations across max iteration counts.}
+  \label{fig:graph10}
+\end{figure}
+\vspace{-4pt} 
+
+\begin{figure}[H]
+  \includegraphics[width=0.9\columnwidth]{figures/graph11.png}
+  \caption{Training FS score for top-performing model configurations across max iteration counts.}
+  \label{fig:graph11}
+\end{figure}
+\vspace{-4pt} 
+
+\begin{figure}[H]
+  \includegraphics[width=0.9\columnwidth]{figures/graph12.png}
+  \caption{Validation FS score for top-performing model configurations across max iteration counts.}
+  \label{fig:graph12}
+\end{figure}
+\vspace{-4pt} 
 
 \end{document}
