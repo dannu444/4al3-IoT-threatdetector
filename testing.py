@@ -62,7 +62,7 @@ class Testing():
         iteration_counts  = [2000, 5000, 10000, 50000]
 
         all_combos = list(product(hidden_candidates, batch_values, learning_rates, iteration_counts))
-        trial_set = random.sample(all_combos, k=3)
+        trial_set = random.sample(all_combos, k=50)
 
         device  = torch.device("cpu")
         results = {}
