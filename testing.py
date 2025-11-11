@@ -187,9 +187,6 @@ def main():
     input = pd.read_csv(args.input_path)
     target = pd.read_csv(args.target_path)
 
-    # Drop unnecessary features
-    input.drop("bwd_URG_flag_count", axis=1, inplace=True)
-
     # Transfer input and target data to numpy arrays
     input = input.to_numpy()
     target = target.to_numpy()
