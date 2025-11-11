@@ -6,9 +6,9 @@ def preprocess(df:pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
 
     num_classes = len(df["Attack_type"].unique())
 
-    # Remove id related features
+    # Remove id related features and bwd_URG_flag_count (constant feature)
 
-    df.drop(["id", "id.orig_p", "id.resp_p"], axis=1, inplace=True)
+    df.drop(["id", "id.orig_p", "id.resp_p", "bwd_URG_flag_count"], axis=1, inplace=True)
 
     # Encode categorical features to numerical values
 
