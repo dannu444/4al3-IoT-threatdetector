@@ -52,7 +52,7 @@ Two other papers that work on similar problems in classifying general internet t
 
 \subsection{Original Dataset}
 
-The original dataset can be found on the UC Irvine Machine Learning Repository \citep{ref2} and has also been submitted to the drop box as a csv file called RT\_IOT2022.csv. This dataset has 123,117 instances and includes 84 input features and one target. The dataset includes two categorical input features, proto and service. Proto has three categories. Service has nine categories (and one category of empty). The target, Attack\_type, is also categorical. Attack\_type has 12 categories with three being benign network traffic and nine being malicious network traffic. Note that one category of the Attack\_type, dos\_syn\_hping, represents 76.9\% of the dataset. On the other hand, the Attack\_types, Metasploit\_Brute\_Force\_SSH and NMAP\_FIN\_SCAN, make up less than 0.1\% of the dataset. Finally, one of the input features, bwd\_URG\_flag\_count, is zero for every instance in the dataset. The other 82 input features are numerical.
+The original dataset can be found on the UC Irvine Machine Learning Repository \citep{ref2} and is also available on our GitHub repository. This dataset has 123,117 instances and includes 84 input features and one target. The dataset includes two categorical input features, proto and service. Proto has three categories. Service has nine categories (and one category of empty). The target, Attack\_type, is also categorical. Attack\_type has 12 categories with three being benign network traffic and nine being malicious network traffic. Note that one category of the Attack\_type, dos\_syn\_hping, represents 76.9\% of the dataset. On the other hand, the Attack\_types, Metasploit\_Brute\_Force\_SSH and NMAP\_FIN\_SCAN, make up less than 0.1\% of the dataset. Finally, one of the input features, bwd\_URG\_flag\_count, is zero for every instance in the dataset. The other 82 input features are numerical.
 
 \subsection{Preprocessing Implementation}
 \label{sec:Preprocessing}
@@ -63,8 +63,7 @@ For preprocessing, we perform three main transformations. First, we remove the f
 
 After preprocessing, the input data has 91 features. The increased number of features is a result of transferring the two categorical features into one-hot vectors. In the preprocessed dataset, all the features are numeric and normalized. The target data now has 12 numeric features. Again, there are 12 features because each one corresponds to a category for the Attack\_type one-hot vector.
 
-This preprocessed version of the input and target have been submitted to the drop box as csv files called input.csv and target.csv respectively.
-
+This preprocessed version of the input and target can be created from the original dataset using the preprocess.py script.
 
 \section{Features}
 \label{sec:Features}
