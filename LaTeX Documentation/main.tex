@@ -37,9 +37,9 @@
 
 \section{Introduction}
 
-The Internet of Things (IoT) encapsulates a network of numerous interconnected devices and technologies, facilitating real-time communication and data sharing. In this field, a major concern is the identification of malicious network traffic, an issue only growing in scale as time goes on. IoT connected devices are becoming extremely popular with a predicted 29 billion IoT connected devices by 2030 \citep{ref1}.However, due to network complexities as well as the diverse technologies and communication channels integrated through the system, there are many possible areas of weakness that leave IoT devices susceptible to cyber-attacks and malicious activity. Almost all IoT systems are at risk of attack, regardless of the active security measures put into place.
+The Internet of Things (IoT) encapsulates a network of numerous interconnected devices and technologies, facilitating real-time communication and data sharing. In this field, a major concern is the identification of malicious network traffic, an issue only growing in scale as time goes on. IoT connected devices are becoming extremely popular with a predicted 29 billion IoT connected devices by 2030 \citep{ref1}. However, due to network complexities as well as the diverse technologies and communication channels integrated through the system, there are many possible areas of weakness that leave IoT devices susceptible to cyber-attacks and malicious activity. Almost all IoT systems are at risk of attack, regardless of the active security measures put into place.
 
-As a means of risk mitigation, this project aims to classify network traffic as one of 12 different classes including 9 malicious behaviors and 3 benign behaviors. Such a classifier can be used within Intrusion Detection Systems (IDSs), resulting in more robust and adaptive security for IoT networks \citep{ref2}. Many such IoT network monitoring applications exist, either as software bundled with the purchase of a related IoT device, or as standalone applications. These applications tend to focus on not only security, but other important statistics including device performance, health, and availability \citep{ref3}. Our solution will focus purely on identifying and intercepting possible attacks.
+As a means of risk mitigation, this project aims to classify network traffic as one of 12 different classes including 9 malicious behaviors and 3 benign behaviors. Such a classifier can be used within Intrusion Detection Systems (IDSs), resulting in more robust and adaptive security for IoT networks \citep{ref2}. Many such IoT network monitoring applications exist, either as software bundled with the purchase of a related IoT device, or as standalone applications. These applications tend to focus on not only security, but other important statistics including device performance, health, and availability \citep{ref3}. Our solution will focus purely on identifying and intercepting possible attacks. Our work is available on the 4AL3 IoT Threat Detector GitHub repository \citep{ref9}.
 
 \section{Related Work}
 
@@ -52,21 +52,33 @@ Two other papers that work on similar problems in classifying general internet t
 
 \subsection{Original Dataset}
 
-INSERT SECTION
+The original dataset can be found on the UC Irvine Machine Learning Repository \citep{ref2} and has also been submitted to the drop box as a csv file called RT\_IOT2022.csv. This dataset has 123,117 instances and includes 84 input features and one target. The dataset includes two categorical input features, proto and service. Proto has three categories. Service has nine categories (and one category of empty). The target, Attack\_type, is also categorical. Attack\_type has 12 categories with three being benign network traffic and nine being malicious network traffic. Note that one category of the Attack\_type, dos\_syn\_hping, represents 76.9\% of the dataset. On the other hand, the Attack\_types, Metasploit\_Brute\_Force\_SSH and NMAP\_FIN\_SCAN, make up less than 0.1\% of the dataset. Finally, one of the input features, bwd\_URG\_flag\_count, is zero for every instance in the dataset. The other 82 input features are numerical.
 
 \subsection{Preprocessing Implementation}
 
-INSERT SECTION
+For preprocessing, we perform three main transformations. First, we remove the features: id, id.orig\_p, and id.resp\_p. As discussed in the Features section, these features do not actually have predictive value towards benign or malicious attack behavior and should be removed. Additionally, we also removed bwd\_URG\_flag\_count as it is zero for every instance and therefore does not have predictive value. Second, we encode the categorical features to numerical values. This is done using pandas’s get\_dummies function. This function takes a categorical feature and splits it into a one-hot vector of the same length as the number of categories that feature has. This was chosen instead of simply mapping a number to each class to avoid implicitly defining an order over the categories. Third, we perform z-score normalization on the input data so that all features are uniformly scaled.
 
 \subsection{Preprocessed Dataset}
 
-INSERT SECTION
+After preprocessing, the input data has 91 features. The increased number of features is a result of transferring the two categorical features into one-hot vectors. In the preprocessed dataset, all the features are numeric and normalized. The target data now has 12 numeric features. Again, there are 12 features because each one corresponds to a category for the Attack\_type one-hot vector.
+
+This preprocessed version of the input and target have been submitted to the drop box as csv files called input.csv and target.csv respectively.
+
 
 \section{Features}
 
-Describe any features you used for your model, or how your data was input to your model. Are you doing feature engineering or feature selection? Are you learning embeddings? Is it all part of one neural network? Refer to item 2. This may range from 0.25 pages to 0.5 pages.
+The majority of the features for our dataset were created using the Zeek network monitoring tool and a plugin called Flowmeter. The description of these features, from \citep{ref10}, can be found in the appendix in Table 1. Features not described by \citep{ref10} are:
+\begin{itemize}
+  \item id: Instance number for specific Attack\_type class
+  \item id.orig\_p: This is the port number of origin device.
+  \item id.resp\_p: This is the port number of response device.
+  \item proto: This is the transport layer protocol of the communication.
+  \item service: This is the application layer protocol of the communication.
+\end{itemize}
+No feature engineering was done as all the features were already given in the dataset.
+For feature selection, id, id.orig\_p, and id.resp\_p are not indicators of benign/malicious network activity. Additionally, from profiling the dataset, we know that the bwd\_URG\_flag\_count feature is a constant value across all instances. For the above reasons, we should not include id, id.orig\_p, id.resp\_p, or bwd\_URG\_flag\_count in our feature set. As recommended by our TA (discussed in more detail in the Feedback and Plans section), we do not further reduce the number of features other than the exceptions listed above. Instead, we feed all the features into the neural network.
 
-INSERT SECTION
+The only feature augmentation we performed was normalizing the data as described in the Preprocessing section.
 
 \section{Implementation}
 
@@ -127,19 +139,21 @@ Overall, both validation and testing show improvement over the baseline f-score 
 
 \section{Feedback and Plans}
 
-Initially, we were planning on implementing a convolutional neural network (CNN) as the authors of the dataset used or a recurrent neural network (RNN) due to the sequential nature of our data. However, our TA suggested that before we try those, we should try a basic neural network as they can also be successful for our type of task. In the future, we plan to try and implement our initial idea of an RNN and CNN neural network to see how they compare to the basic neural network we have implemented.
+Our first piece of feedback is related to our model selection. Initially, we were planning on implementing a convolutional neural network (CNN) as the authors of the dataset used, or a recurrent neural network (RNN) due to the sequential nature of our data. However, our TA suggested that before we try those, we should try a basic neural network as they can also be successful for our type of task. In the future, we plan to try and implement our initial idea of an RNN and CNN neural network to see how they compare to the basic neural network we have implemented. Additionally, per TA feedback, we intend to implement other types of models such as Decisions Trees and Support Vector Machines.
 
-Another piece of feedback we received was based on our feature engineering process. We were unsure of how to find unnecessary features in our dataset. Our TA said that we should first try not removing any features as neural networks can often handle the features themselves. However, if we did need to remove features, checking the correlation between features would be useful. For now, as suggested, we have just used all of the features (excluding the four we discussed in Features). In the future, we plan to use the correlation between features to remove some features and test whether only keeping one of highly correlated features has any positive impact on the model performance. Another method we may try in the future that the TA recommended was plotting the linear regression of each feature vs. the target and using the best ones to narrow down the feature set.
+Another piece of feedback we received is based on our feature selection process. We were unsure how to find unnecessary features in our dataset. Our TA suggested that we should first try not removing any features as neural networks can often handle the features themselves. However, if we did need to remove features, checking the correlation between features would be useful. For now, as suggested, we have used all the features (excluding the four we discussed in the Features section). In the future, we plan to test whether removing features that already have another highly correlated feature in the dataset has a positive impact on the model performance. Another method we plan to try from TA feedback is plotting the linear regression of each feature vs. the target and using the top performing regressions as the feature set (where the exact number of features to include can be determined as a hyperparameter).
 
-A third piece of feedback we received was related to how to determine the number and size of layers we should have in our neural network. The TA suggested experimenting with different sizes and number of layers using hyperparameter searching to find what works best. We have implemented this as described in Results and Evaluation.
+A third piece of feedback we received is related to how to determine the number and size of hidden layers we should have in our neural network. The TA suggested experimenting with different sizes and numbers of layers using hyperparameter searching to find what works best. We have implemented this as described in Results and Evaluation.
 
-After initial evaluation of our model and baseline, we have seen very promising performance. One main concern we have, however, is bias in the dataset making it easier to predict correctly. Namely, one target class makes up 76.9\% of the dataset, and as such, if the model is in doubt, it can choose this class and be right much more frequently than if the classes were uniformly distributed. As a next step, we plan to remove instances of the dataset to get a more uniform distribution of target classes to see how that affects the models' performance.
+After initial evaluation of our model and baseline, we have seen very promising performance. One main concern we have, however, is bias in the dataset making it easier to predict correctly. Namely, one target class makes up 76.9\% of the dataset, and as such, if the model is in doubt, it can choose this class and be right much more frequently than if the classes were equally represented. As a next step, we plan to remove instances of the dataset with the intention to get a more equal distribution of target classes and evaluate how this affects the models’ performance.
+
+We also plan to add another baseline that predicts a specific class every time. We want to add this because it will allow us to see how our model compares against a non-learning, predefined approach. This could be especially interesting because one of our classes makes up a very large percentage of the instances in the dataset. Therefore, this new baseline could predict better than it otherwise would with a dataset that has equally represented classes.
 
 \section*{Team Contributions}
 
-\subsection{Jacob Brodersen - Preprocessing}
+\subsection{Jacob Brodersen}
 
-Key Contribution Area: Preprocessing
+Key Contribution Area: Preprocessing and Dataset Profiling
 
 Contribution Summary: In terms of the code, I worked on the preprocessing, profiling of the dataset, and workflow / script layout. For the report, I worked on Dataset, Features, and Feedback and Plans.
 
@@ -255,5 +269,193 @@ Figure 9 through 12 present top-performing model configurations identified at ea
   \label{fig:graph12}
 \end{figure}
 \vspace{-4pt} 
+
+\begin{table*}
+  \centering
+  \caption{Zeek Description of Features}
+  \begin{tabular}{|l|p{12cm}|}
+    \hline
+    Feature Name & Description \\
+    \hline\hline
+    flow\_duration & The length of the flow in seconds (maximal precision ms). If only on packet was seen the duration is 0. \\
+    \hline
+    fwd\_pkts\_tot & The number of packets travelling in the forward direction. \\
+    \hline
+    bwd\_pkts\_tot & The number of packets travelling in the backwards direction. \\
+    \hline
+    fwd\_data\_pkts\_tot & The number of packets travelling in the forward direction, which have a payload. \\
+    \hline
+    bwd\_data\_pkts\_tot & The number of packets travelling in the backwards direction, which have a payload. \\
+    \hline
+    fwd\_pkts\_per\_sec & The average number of forward packets transmitted per second during the flow. If the duration is 0 then this feature is also set to 0. \\
+    \hline
+    bwd\_pkts\_per\_sec & The average number of backward packets transmitted per second during the flow. If the duration is 0 then this feature is also set to 0. \\
+    \hline
+    flow\_pkts\_per\_sec & The average number of  packets transmitted per second during the flow. If the duration is 0 then this feature is also set to 0. \\
+    \hline
+    down\_up\_ratio & The number of backward packets divided by the number of forward packets. If the number of forward packets is 0 this feature is also set to 0 \\
+    \hline
+    fwd\_header\_size\_tot & The total number of bytes the headers of the forward packets contained. \\
+    \hline
+    fwd\_header\_size\_min & The number of bytes the smallest headers of the forward packets contained. \\
+    \hline
+    fwd\_header\_size\_max & The number of bytes the largest headers of the forward packets contained. \\
+    \hline
+    bwd\_header\_size\_tot & The total number of bytes the headers of the backward packets contained. \\
+    \hline
+    bwd\_header\_size\_min & The number of bytes the smallest headers of the backward packets contained. \\
+    \hline
+    bwd\_header\_size\_max & The number of bytes the largest headers of the backward packets contained. \\
+    \hline
+    fwd\_pkts\_payload.max & The largest payload size, in bytes, seen in the forward direction. \\
+    \hline
+    fwd\_pkts\_payload.min & The smallest payload size, in bytes, seen in the forward direction. \\
+    \hline
+    fwd\_pkts\_payload.tot & The total payload size, in bytes, seen in the forward direction. \\
+    \hline
+    fwd\_pkts\_payload.avg & The average payload size, in bytes, seen in the forward direction. \\
+    \hline
+    fwd\_pkts\_payload.std & The standard deviation of the payload size, in bytes, seen in the forward direction. \\
+    \hline
+    bwd\_pkts\_payload.max & The largest payload size, in bytes, seen in the backward direction. \\
+    \hline
+    bwd\_pkts\_payload.min & The smallest payload size, in bytes, seen in the backward direction. \\
+    \hline
+    bwd\_pkts\_payload.tot & The total payload size, in bytes, seen in the backward direction. \\
+    \hline
+    bwd\_pkts\_payload.avg & The average payload size, in bytes, seen in the backward direction. \\
+    \hline
+    bwd\_pkts\_payload.std & The standard deviation of the payload size, in bytes, seen in the backward direction. \\
+    \hline
+    flow\_pkts\_payload.max & The largest payload size, in bytes, seen in the flow. \\
+    \hline
+    flow\_pkts\_payload.min & The smallest payload size, in bytes, seen in the flow. \\
+    \hline
+    flow\_pkts\_payload.tot & The total payload size, in bytes, seen in the flow. \\
+    \hline
+    flow\_pkts\_payload.avg & The average payload size, in bytes, seen in the flow. \\
+    \hline
+    flow\_pkts\_payload.std & The standard deviation of the payload size, in bytes, seen in the flow \\
+    \hline
+    payload\_bytes\_per\_second & The average number of payload bytes transmitted per second. If the duration is 0 then this feature is also set to 0. \\
+    \hline
+  \end{tabular}
+\end{table*}
+
+\begin{table*}
+  \centering
+  \begin{tabular}{|l|p{12cm}|}
+    \hline
+    Feature Name & Description \\
+    \hline\hline
+    flow\_FIN\_flag\_count & The total number of FIN flags which have been seen in a TCP flow. If the the flow is not a TCP flow this feature is set to 0. \\
+    \hline
+    flow\_SYN\_flag\_count & The total number of SYN flags which have been seen in a TCP flow. If the the flow is not a TCP flow this feature is set to 0. \\
+    \hline
+    flow\_RST\_flag\_count & The total number of RST flags which have been seen in a TCP flow. If the the flow is not a TCP flow this feature is set to 0. \\
+    \hline
+    fwd\_PSH\_flag\_count & The total number of PSH flags which have been seen in the forward direction of a TCP flow. If the the flow is not a TCP flow this feature is set to 0. \\
+    \hline
+    bwd\_PSH\_flag\_count & The total number of PSH flags which have been seen in the backward direction of a TCP flow. If the the flow is not a TCP flow this feature is set to 0. \\
+    \hline
+    flow\_ACK\_flag\_count & The total number of ACK flags which have been seen in a TCP flow. If the the flow is not a TCP flow this feature is set to 0. \\
+    \hline
+    fwd\_URG\_flag\_count & The total number of URG flags which have been seen in the forward direction of a TCP flow. If the the flow is not a TCP flow this feature is set to 0. \\
+    \hline
+    bwd\_URG\_flag\_count & The total number of URG flags which have been seen in the backward direction of a TCP flow. If the the flow is not a TCP flow this feature is set to 0. \\
+    \hline
+    flow\_CWR\_flag\_count & The total number of CWR flags which have been seen in a TCP flow. If the the flow is not a TCP flow this feature is set to 0. \\
+    \hline
+    flow\_ECE\_flag\_count & The total number of ECE flags which have been seen in a TCP flow. If the the flow is not a TCP flow this feature is set to 0. \\
+    \hline
+    fwd\_iat.max & The largest inter-arrival time in microseconds bet two consecutive packets in the forward direction. \\
+    \hline
+    fwd\_iat.min & The smallest inter-arrival time in microseconds bet two consecutive packets in the forward direction. \\
+    \hline
+    fwd\_iat.tot & The inter-arrival time in microseconds bet two consecutive packets in the forward direction. \\
+    \hline
+    fwd\_iat.avg & The average inter-arrival time in microseconds bet two consecutive packets in the forward direction. \\
+    \hline
+    fwd\_iat.std & The standard deviation of all inter-arrival times in the forward direction in microseconds. \\
+    \hline
+    bwd\_iat.max & The largest inter-arrival time in microseconds bet two consecutive packets in the backward direction. \\
+    \hline
+    bwd\_iat.min & The smallest inter-arrival time in microseconds bet two consecutive packets in the backward direction. \\
+    \hline
+    bwd\_iat.tot & The inter-arrival time in microseconds bet two consecutive packets in the backward direction. \\
+    \hline
+    bwd\_iat.avg & The average inter-arrival time in microseconds bet two consecutive packets in the backward direction. \\
+    \hline
+    bwd\_iat.std & The standard deviation of all inter-arrival times in the backward direction in microseconds. \\
+    \hline
+    flow\_iat.max & The largest inter-arrival time in microseconds bet two consecutive packets in the flow. \\
+    \hline
+    flow\_iat.min & The smallest inter-arrival time in microseconds bet two consecutive packets in the flow. \\
+    \hline
+    flow\_iat.tot & The inter-arrival time in microseconds bet two consecutive packets in the flow. \\
+    \hline
+    flow\_iat.avg & The average inter-arrival time in microseconds bet two consecutive packets in the flow. \\
+    \hline
+    flow\_iat.std & The standard deviation of all inter-arrival times in the flow, in microseconds. \\
+    \hline
+    fwd\_subflow\_pkts & The average number of packets in the subflows in the forward direction. \\
+    \hline
+    bwd\_subflow\_pkts & The average number of packets in the subflows in the backward direction. \\
+    \hline
+    fwd\_subflow\_bytes & The average number of payload bytes in the subflows in the forward direction. \\
+    \hline
+    bwd\_subflow\_bytes & The average number of payload bytes in the subflows in the backward direction. \\
+    \hline
+    fwd\_bulk\_bytes & The average number of payload bytes transmitted in a bulk transmission in forward direction. \\
+    \hline
+  \end{tabular}
+\end{table*}
+
+\begin{table*}
+  \centering
+  \begin{tabular}{|l|p{12cm}|}
+    \hline
+    Feature Name & Description \\
+    \hline\hline
+    bwd\_bulk\_bytes & The average number of payload bytes transmitted in a bulk transmission in backward direction. \\
+    \hline
+    fwd\_bulk\_packets & The average number of packets transmitted in a bulk transmission in forward direction. \\
+    \hline
+    bwd\_bulk\_packets & The average number of packets transmitted in a bulk transmission in backward direction. \\
+    \hline
+    fwd\_bulk\_rate & The average number of payload bytes transmitted per second during a bulk transmission in forward direction. \\
+    \hline
+    bwd\_bulk\_rate & The average number of payload bytes transmitted per second during a bulk transmission in backward direction. \\
+    \hline
+    active.max & The longest duration the flow was active in microseconds. \\
+    \hline
+    active.min & The shortest duration the flow was active in microseconds. \\
+    \hline
+    active.tot & The total duration the flow was active in microseconds. \\
+    \hline
+    active.avg & The average duration the flow was active in microseconds. \\
+    \hline
+    active.std & The standard deviation of all active periods in microseconds. \\
+    \hline
+    idle.max & The longest duration the flow was idle in microseconds. \\
+    \hline
+    idle.min & The shortest duration the flow was idle in microseconds. \\
+    \hline
+    idle.tot & The total duration the flow was idle in microseconds. \\
+    \hline
+    idle.avg & The average duration the flow was idle in microseconds. \\
+    \hline
+    idle.std & The standard deviation of all idle periods in microseconds. \\
+    \hline
+    fwd\_init\_window\_size & The window size in bytes the first packet in the forward direction has. The windows scale parameter is currently ignored, as this is only set in a SYN packet but we currently look at any packet \\
+    \hline
+    bwd\_init\_window\_size & The window size in bytes the first packet in the backward direction has. The windows scale parameter is currently ignored, as this is only set in a SYN packet but we currently look at any packet. \\
+    \hline
+    fwd\_last\_window\_size & The window size in bytes the last packet in the forward direction has. The windows scale parameter is currently ignored, as this is only set in a SYN packet but we currently look at any packet. \\
+    \hline
+    bwd\_last\_window\_size & The window size in bytes the last packet in the backward direction has. The windows scale parameter is currently ignored, as this is only set in a SYN packet but we currently look at any packet. \\
+    \hline
+  \end{tabular}
+\end{table*}
 
 \end{document}
