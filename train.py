@@ -147,11 +147,11 @@ def main():
     print(f"Training target shape: {y_train_t.shape}")
     print(f"Validation target shape: {y_val_t.shape}")
 
-    model = GeneralNN(X_train.shape[1], [128, 64, 32, 16], y_train.shape[1])
+    model = GeneralNN(X_train.shape[1], [32, 16], y_train.shape[1])
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.01)
 
-    train_losses, val_losses, train_fs, val_fs, iterations = train_SGD(model, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, 100000, 16, 1000)
+    train_losses, val_losses, train_fs, val_fs, iterations = train_SGD(model, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, 10000, 16, 500)
 
     # Initial plotting
     plt.figure(figsize=(12, 6))
