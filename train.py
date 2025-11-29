@@ -4,7 +4,7 @@ import torch.optim as optim
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score, confusion_matrix
 from sklearn.utils import shuffle
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
@@ -71,6 +71,59 @@ def calculate_full_loss(model, criterion, X, y):
     model.train()
 
     return loss.item()
+
+# NOTE: functions calculate_full_accuracy, per-class accuracy/precisions
+#       and f score are meant for use with pytorch models. sklearns do not
+#       need these, the inner functions being called can be done directly on
+#       those models outputs.
+def calculate_full_accuracy(model, X, y):
+    model.eval()
+    outputs = None
+    with torch.no_grad():
+        outputs = model(X)
+    model.train()
+
+    y_true = torch.argmax(y, dim=1).numpy()
+    y_pred = torch.argmax(outputs, dim=1).numpy()
+
+    return accuracy_score(y_true, y_pred)
+
+def calculate_per_class_accuracies(model, X, y):
+    model.eval()
+    outputs = None
+    with torch.no_grad():
+        outputs = model(X)
+    model.train()
+
+    y_true = torch.argmax(y, dim=1).numpy()
+    y_pred = torch.argmax(outputs, dim=1).numpy()
+
+    cm = confusion_matrix(y_true, y_pred)
+    return cm.diagonal()/cm.sum(axis=1)
+
+def calculate_per_class_precisions(model, X, y):
+    model.eval()
+    outputs = None
+    with torch.no_grad():
+        outputs = model(X)
+    model.train()
+
+    y_true = torch.argmax(y, dim=1).numpy()
+    y_pred = torch.argmax(outputs, dim=1).numpy()
+
+    return precision_score(y_true, y_pred)
+
+def calculate_per_class_recalls(model, X, y):
+    model.eval()
+    outputs = None
+    with torch.no_grad():
+        outputs = model(X)
+    model.train()
+
+    y_true = torch.argmax(y, dim=1).numpy()
+    y_pred = torch.argmax(outputs, dim=1).numpy()
+
+    return recall_score(y_true, y_pred)
 
 def calculate_f_score(model, X, y):
     # get predictions

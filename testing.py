@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold, GridSearchCV
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, make_scorer
+from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score, confusion_matrix, ConfusionMatrixDisplay, make_scorer
 
 import torch
 import torch.nn as nn
@@ -228,23 +228,35 @@ def main():
     
     device  = torch.device("cpu")
 
-    #evaluation on baseline
-    model_base = train.MultiLogisticRegression(test.input_dim, test.output_dim)
-    model_base = model_base.to(device)
+    # evaluation of logisitic regression baseline
+    model_base_lr = train.MultiLogisticRegression(test.input_dim, test.output_dim)
+    model_base_lr = model_base_lr.to(device)
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model_base.parameters(), lr=0.1)
-    train.train_SGD(model_base, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, 10000, 64, test.check_every)
-    final_test_f1 = train.calculate_f_score(model_base, X_test_t, y_test_t)
-    print(f"f-score on baseline model:          {final_test_f1:.4f}")
+    optimizer = optim.SGD(model_base_lr.parameters(), lr=0.1)
+    train.train_SGD(model_base_lr, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, 10000, 64, test.check_every)
+    final_test_f1 = train.calculate_f_score(model_base_lr, X_test_t, y_test_t)
+    print(f"f-score of logistic regression baseline:          {final_test_f1:.4f}")
+
+    # evaluation of decision tree baseline
+    model_base_dt = train.DecisionTree()
+    model_base_dt.train(X_train_t, y_train_t)
+    final_test_f1 = f1_score(y_test_t, model_base_dt.predict(X_test_t))
+    print(f"f-score of decision tree baseline:          {final_test_f1:.4f}")
+
+    # evaluation of SVC (with rbf kernel) baseline
+    model_base_sv = train.SVCBaseline()
+    model_base_sv.train(X_train_t, y_train_t)
+    final_test_f1 = f1_score(y_test_t, model_base_sv.predict(X_test_t))
+    print(f"f-score of svc baseline:          {final_test_f1:.4f}")
     
-    #evaluation of f-score on test set
+    # evaluation of neural network
     model_eval = train.GeneralNN(test.input_dim, best['cfg']['hidden'], test.output_dim)
     model_eval = model_eval.to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model_eval.parameters(), lr=best['cfg']['lr'])
     train.train_SGD(model_eval, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, best['cfg']['iters'], best['cfg']['bs'], test.check_every)
     final_test_f1 = train.calculate_f_score(model_eval, X_test_t, y_test_t)
-    print(f"f-score on testing data:           {final_test_f1:.4f}")
+    print(f"f-score of neural network:           {final_test_f1:.4f}")
 
 if __name__ == "__main__":
     main()
