@@ -240,13 +240,13 @@ def main():
     # evaluation of decision tree baseline
     model_base_dt = train.DecisionTree()
     model_base_dt.train(X_train_t, y_train_t)
-    final_test_f1 = f1_score(y_test_t, model_base_dt.predict(X_test_t))
+    final_test_f1 = f1_score(torch.argmax(y_test_t, dim=1).numpy(), np.argmax(model_base_dt.predict(X_test_t), axis=1), average='macro')
     print(f"f-score of decision tree baseline:          {final_test_f1:.4f}")
 
     # evaluation of SVC (with rbf kernel) baseline
     model_base_sv = train.SVCBaseline()
     model_base_sv.train(X_train_t, y_train_t)
-    final_test_f1 = f1_score(y_test_t, model_base_sv.predict(X_test_t))
+    final_test_f1 = f1_score(torch.argmax(y_test_t, dim=1).numpy(), model_base_sv.predict(X_test_t), average='macro')
     print(f"f-score of svc baseline:          {final_test_f1:.4f}")
     
     # evaluation of neural network

@@ -58,10 +58,11 @@ class SVCBaseline():
         self.svm = SVC(kernel='rbf')
 
     def train(self, X_train, y_train):
-        self.svm.fit(X_train, y_train)
+        # y input must not be one-hot for sklearn svc.
+        self.svm.fit(X_train, np.argmax(y_train, axis=1))
 
     def predict(self, X):
-        return self.svm.fit(X)
+        return self.svm.predict(X)
     
 def calculate_full_loss(model, criterion, X, y):
     model.eval()
