@@ -1,9 +1,6 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn
-import sklearn
-from sklearn.svm import SVC
 from sklearn.model_selection import KFold, GridSearchCV
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, make_scorer
 
