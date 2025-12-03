@@ -2,7 +2,7 @@ import pandas as pd
 from argparse import ArgumentParser
 import random
 
-def preprocess(df:pd.DataFrame, downsample:bool=False) -> tuple[pd.DataFrame, pd.DataFrame]:
+def preprocess(df:pd.DataFrame, downsample:bool=False, sample:bool=False) -> tuple[pd.DataFrame, pd.DataFrame]:
     # Get number of classes
 
     num_classes = len(df["Attack_type"].unique())
@@ -21,6 +21,15 @@ def preprocess(df:pd.DataFrame, downsample:bool=False) -> tuple[pd.DataFrame, pd
             selected_indices_overall.extend(selected_indices)
 
         df = df.loc[selected_indices_overall]
+
+    if sample:
+        indices = df.query(f"Attack_type == 'DOS_SYN_Hping'").index.tolist()
+        selected_indices = random.sample(indices, 10000)
+        remove_indices = []
+        for i in indices:
+            if i not in selected_indices:
+                remove_indices.append(i)
+        df.drop(remove_indices, axis=0, inplace=True)
 
     # Remove id related features and bwd_URG_flag_count (constant feature)
 
@@ -50,10 +59,11 @@ def main():
     parser.add_argument("input_dest_path", type=str, help="Relative path to save preprocessed input (csv file).")
     parser.add_argument("target_dest_path", type=str, help="Relative path to save preprocessed target (csv file).")
     parser.add_argument("-d", "--down_sample", action="store_true", help="Flag for whether to perform downsampling.")
+    parser.add_argument("-s", "--sample", action="store_true", help="Randomly samples 10,000 instances of the dos_syn_hping class to reduce bias.")
     args = parser.parse_args()
 
     df = pd.read_csv(args.file_path)
-    input, target = preprocess(df, args.down_sample)
+    input, target = preprocess(df, args.down_sample, args.sample)
     input.to_csv(args.input_dest_path, index=False)
     target.to_csv(args.target_dest_path, index=False)
 
