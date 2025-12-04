@@ -100,7 +100,7 @@ def calculate_per_class_accuracies(model, X, y):
     y_pred = torch.argmax(outputs, dim=1).numpy()
 
     cm = confusion_matrix(y_true, y_pred)
-    return cm.diagonal()/cm.sum(axis=1)
+    return cm, cm.diagonal()/cm.sum(axis=1)
 
 def calculate_per_class_precisions(model, X, y):
     model.eval()
@@ -112,7 +112,7 @@ def calculate_per_class_precisions(model, X, y):
     y_true = torch.argmax(y, dim=1).numpy()
     y_pred = torch.argmax(outputs, dim=1).numpy()
 
-    return precision_score(y_true, y_pred)
+    return precision_score(y_true, y_pred, average=None, zero_division=0)
 
 def calculate_per_class_recalls(model, X, y):
     model.eval()
@@ -124,7 +124,7 @@ def calculate_per_class_recalls(model, X, y):
     y_true = torch.argmax(y, dim=1).numpy()
     y_pred = torch.argmax(outputs, dim=1).numpy()
 
-    return recall_score(y_true, y_pred)
+    return recall_score(y_true, y_pred, average=None, zero_division=0)
 
 def calculate_f_score(model, X, y):
     # get predictions
