@@ -14,6 +14,8 @@ import train
 from argparse import ArgumentParser 
 from itertools import product
 
+NUM_TRIALS = 100
+
 def set_all_seeds(seed):
         random.seed(seed)
         np.random.seed(seed)
@@ -51,15 +53,14 @@ class Testing():
         
         return hidden_dim
 
-
     def hyperparameter_tuning(self):
         hidden_candidates = [self.model_structure() for _ in range(20)] 
         batch_values      = [64, 128, 256]
-        learning_rates    = [1e-1, 5e-2, 1e-2, 5e-3]
+        learning_rates    = [1e-2, 1e-3, 1e-4, 1e-5]
         iteration_counts  = [2000, 5000, 10000, 50000]
 
         all_combos = list(product(hidden_candidates, batch_values, learning_rates, iteration_counts))
-        trial_set = random.sample(all_combos, k=50)
+        trial_set = random.sample(all_combos, k=NUM_TRIALS)
 
         device  = torch.device("cpu")
         results = {}
@@ -74,7 +75,7 @@ class Testing():
             model = train.GeneralNN(self.input_dim, hidden_struct, self.output_dim)
             model = model.to(device)
             criterion = nn.CrossEntropyLoss()
-            optimizer = optim.SGD(model.parameters(), lr=lr)
+            optimizer = optim.Adam(model.parameters(), lr=lr)
             train_losses, val_losses, train_fs, val_fs, iterations = train.train_SGD(model, criterion, optimizer, self.X_train, self.y_train, self.X_val, self.y_val, iters, bs, self.check_every)
 
             if (iterations[-1] < 50000):
@@ -93,8 +94,6 @@ class Testing():
                 "iterations":   iterations,
             }
 
-
-            
             print(f"[{trial_idx}] hs={hidden_struct} bs={bs} lr={lr} iters={iters} -> val_f1={final_val_f1:.4f}")
             if final_val_f1 > best["score"]:
                 best["score"] = final_val_f1
@@ -103,7 +102,7 @@ class Testing():
         print("\n")
         print(f"best configuration:                 hs={best['cfg']['hidden']}  bs={best['cfg']['bs']}  lr={best['cfg']['lr']}  iters={best['cfg']['iters']}")
         print(f"best FS score on validation data:   {best['score']:.4f}")
-
+        print("\n##############################################################################################################################\n")
         return results, best
     
             
@@ -173,6 +172,63 @@ class Testing():
 
         plt.tight_layout()
         plt.show()
+
+class Results():
+    def __init__(self):
+        self.titles = ["logistic regression baseline", "decision tree baseline", "SVC baseline", "neural network"]
+        self.matrices = []
+        self.accuracies = []
+        self.fscores = []
+
+    def get_pytorch_figures(self, model, X_test, y_test):
+        fscore = train.calculate_f_score(model, X_test, y_test)
+        self.accuracies.append(fscore)
+        full_accuracy = train.calculate_full_accuracy(model, X_test, y_test)
+        self.accuracies.append(full_accuracy)
+        cm, accuracy_per_class = train.calculate_per_class_accuracies(model, X_test, y_test)
+        self.matrices.append(cm)
+        precision_per_class = train.calculate_per_class_precisions(model, X_test, y_test)
+        recall_per_class = train.calculate_per_class_recalls(model, X_test, y_test)
+
+        print(f"f-score:                    {fscore:.4f}")
+        print(f"overall accuracy:           {full_accuracy:.4f}")
+        print("accuracy (per class):      ", ", ".join(f"{a:.4f}" for a in accuracy_per_class))
+        print("precision (per class):      ", ", ".join(f"{p:.4f}" for p in precision_per_class))
+        print("recall (per class):         ", ", ".join(f"{r:.4f}" for r in recall_per_class))
+
+    def get_sklearn_figures(self, y_true, y_pred):
+        fscore = f1_score(y_true, y_pred, average='macro')
+        self.accuracies.append(fscore)
+        full_accuracy = accuracy_score(y_true, y_pred) 
+        self.accuracies.append(full_accuracy)
+        cm = confusion_matrix(y_true, y_pred)
+        self.matrices.append(cm)
+        accuracy_per_class = cm.diagonal() / cm.sum(axis=1)
+        precision_per_class = precision_score(y_true, y_pred, average=None, zero_division=0)
+        recall_per_class = recall_score(y_true, y_pred, average=None, zero_division=0)
+
+        print(f"f-score:                    {fscore:.4f}")
+        print(f"overall accuracy:           {full_accuracy:.4f}")
+        print("accuracy (per class):      ", ", ".join(f"{a:.4f}" for a in accuracy_per_class))
+        print("precision (per class):      ", ", ".join(f"{p:.4f}" for p in precision_per_class))
+        print("recall (per class):         ", ", ".join(f"{r:.4f}" for r in recall_per_class))
+
+    def print_cm(self):
+        for i in range(0, len(self.matrices), 2):
+            sub_matrices = self.matrices[i:i+2]
+            sub_titles = self.titles[i:i+2]
+            fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+            axes = axes.ravel()
+
+            for ax, cm, title in zip(axes, sub_matrices, sub_titles):
+                disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+                disp.plot(ax=ax)
+                ax.set_title(title)
+                ax.set_xlabel('Predicted label')
+                ax.set_ylabel('True label')
+
+            plt.tight_layout()
+            plt.show()
         
 def main():
     parser = ArgumentParser()
@@ -230,35 +286,46 @@ def main():
     
     device  = torch.device("cpu")
 
+    results = Results()
+
     # evaluation of logisitic regression baseline
     model_base_lr = train.MultiLogisticRegression(test.input_dim, test.output_dim)
     model_base_lr = model_base_lr.to(device)
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model_base_lr.parameters(), lr=0.1)
+    optimizer = optim.Adam(model_base_lr.parameters(), lr=0.001)
     train.train_SGD(model_base_lr, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, 10000, 64, test.check_every)
-    final_test_f1 = train.calculate_f_score(model_base_lr, X_test_t, y_test_t)
-    print(f"f-score of logistic regression baseline:          {final_test_f1:.4f}")
+    print("EVALUATION RESULTS FOR LOGISTIC REGRESSION BASELINE\n")
+    results.get_pytorch_figures(model_base_lr, X_test_t, y_test_t)
 
     # evaluation of decision tree baseline
     model_base_dt = train.DecisionTree()
     model_base_dt.train(X_train_t, y_train_t)
-    final_test_f1 = f1_score(torch.argmax(y_test_t, dim=1).numpy(), np.argmax(model_base_dt.predict(X_test_t), axis=1), average='macro')
-    print(f"f-score of decision tree baseline:          {final_test_f1:.4f}")
+    y_pred = np.argmax(model_base_dt.predict(X_test_t), axis=1)
+    y_true = torch.argmax(y_test_t, dim=1).numpy()
+    print("\n##############################################################################################################################\n") 
+    print("EVALUATION RESULTS FOR DECISION TREE BASELINE\n")
+    results.get_sklearn_figures(y_true, y_pred)
 
     # evaluation of SVC (with rbf kernel) baseline
     model_base_sv = train.SVCBaseline()
     model_base_sv.train(X_train_t, y_train_t)
-    final_test_f1 = f1_score(torch.argmax(y_test_t, dim=1).numpy(), model_base_sv.predict(X_test_t), average='macro')
-    print(f"f-score of svc baseline:          {final_test_f1:.4f}")
+    y_pred = model_base_sv.predict(X_test_t)
+    y_true = torch.argmax(y_test_t, dim=1).numpy()
+    print("\n##############################################################################################################################\n") 
+    print("EVALUATION RESULTS FOR SVC BASELINE\n")
+    results.get_sklearn_figures(y_true, y_pred)
     
     # evaluation of neural network
     model_eval = train.GeneralNN(test.input_dim, best['cfg']['hidden'], test.output_dim)
     model_eval = model_eval.to(device)
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model_eval.parameters(), lr=best['cfg']['lr'])
+    optimizer = optim.Adam(model_eval.parameters(), lr=best['cfg']['lr'])
     train.train_SGD(model_eval, criterion, optimizer, X_train_t, y_train_t, X_val_t, y_val_t, best['cfg']['iters'], best['cfg']['bs'], test.check_every)
-    final_test_f1 = train.calculate_f_score(model_eval, X_test_t, y_test_t)
-    print(f"f-score of neural network:           {final_test_f1:.4f}")
+    print("\n##############################################################################################################################\n") 
+    print("EVALUATION RESULTS FOR NEURAL NETWORK\n")
+    results.get_pytorch_figures(model_eval, X_test_t, y_test_t)
+
+    results.print_cm()
 
 if __name__ == "__main__":
     main()
