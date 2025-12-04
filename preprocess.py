@@ -4,7 +4,7 @@ import random
 from feature_engine.selection import DropCorrelatedFeatures
 from sklearn.utils import resample
 
-def preprocess(df:pd.DataFrame, downsample:bool=False, upsample:bool=False, sample:bool=False, correlation_threshold:float=None) -> tuple[pd.DataFrame, pd.DataFrame]:
+def preprocess(df:pd.DataFrame, downsample:bool=False, sample:bool=False, correlation_threshold:float=None) -> tuple[pd.DataFrame, pd.DataFrame]:
     # Get number of classes
 
     num_classes = len(df["Attack_type"].unique())
@@ -21,19 +21,6 @@ def preprocess(df:pd.DataFrame, downsample:bool=False, upsample:bool=False, samp
             indices = df.query(f"Attack_type == '{c}'").index.tolist()
             selected_indices = random.sample(indices, min_class_num)
             selected_indices_overall.extend(selected_indices)
-
-        df = df.loc[selected_indices_overall]
-
-    if upsample:
-        classes = df["Attack_type"]
-        # value_counts = classes.value_counts()
-        # max_class_num = value_counts.max()
-
-        selected_indices_overall = []
-        for c in classes.unique():
-            indices = df.query(f"Attack_type == '{c}'").index.tolist()
-            # Make all equal to 10,000
-            selected_indices_overall.extend(resample(indices, n_samples=10000))
 
         df = df.loc[selected_indices_overall]
 
@@ -80,13 +67,12 @@ def main():
     parser.add_argument("input_dest_path", type=str, help="Relative path to save preprocessed input (csv file).")
     parser.add_argument("target_dest_path", type=str, help="Relative path to save preprocessed target (csv file).")
     parser.add_argument("-d", "--down_sample", action="store_true", help="Flag for whether to perform downsampling.")
-    parser.add_argument("-u", "--up_sample", action="store_true", help="Flag for whether to perform upsampling.")
     parser.add_argument("-s", "--sample", action="store_true", help="Randomly samples 10,000 instances of the dos_syn_hping class to reduce bias.")
     parser.add_argument("-c", "--correlation_threshold", type=float, help="Removes features based on correlation equal to or greater than this value.")
     args = parser.parse_args()
 
     df = pd.read_csv(args.file_path)
-    input, target = preprocess(df, args.down_sample, args.up_sample, args.sample, args.correlation_threshold)
+    input, target = preprocess(df, args.down_sample, args.sample, args.correlation_threshold)
     input.to_csv(args.input_dest_path, index=False)
     target.to_csv(args.target_dest_path, index=False)
 

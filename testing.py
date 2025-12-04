@@ -13,6 +13,7 @@ import train
 
 from argparse import ArgumentParser 
 from itertools import product
+from imblearn.over_sampling import RandomOverSampler
 
 NUM_TRIALS = 100
 
@@ -234,6 +235,7 @@ def main():
     parser = ArgumentParser()
     parser.add_argument("input_path", type=str, help="Relative path to input data (csv file).")
     parser.add_argument("target_path", type=str, help="Relative path to target data (csv file).")
+    parser.add_argument("-u", "--up_sample", action="store_true", help="Flag for whether to perform upsampling.")
     args = parser.parse_args()
 
     # Get input and target data
@@ -261,6 +263,50 @@ def main():
     y_val = target[train_end:val_end, :]
     X_test = input[val_end:, :]
     y_test = target[val_end:, :]
+
+    # Check for classes being equally distributed
+    test = {0: 0,
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            8: 0,
+            9: 0,
+            10: 0,
+            11: 0}
+    for i in range(y_train.shape[0]):
+        for j in range(y_train.shape[1]):
+            if y_train[i][j] > 0:
+                test[j] += 1
+    print("before potential upsampling")
+    print(test)
+
+    if args.up_sample:
+        ros = RandomOverSampler(random_state=1234)
+        X_train, y_train = ros.fit_resample(X_train, y_train)
+
+    # Check for classes being equally distributed
+    test = {0: 0,
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            8: 0,
+            9: 0,
+            10: 0,
+            11: 0}
+    for i in range(y_train.shape[0]):
+        for j in range(y_train.shape[1]):
+            if y_train[i][j] > 0:
+                test[j] += 1
+    print("after potential upsampling")
+    print(test)
 
     # Create tensors for data
     X_train_t = torch.tensor(X_train).float()
