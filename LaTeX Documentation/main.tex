@@ -163,35 +163,35 @@ During the progress report, the only metrics used for evaluation were F-scores a
   \centering
   \begin{tabular}{lp{0.6cm}lcc}
       \toprule
-      Classifier & ID & Parameter & F-score & Accuracy \\
+      Classifier & ID & Dataset Alterations & F-score & Accuracy \\
       \midrule
 
       \multirow{3}{*}{Logistic Regression}
         & C1 & {\footnotesize dataset with no modifications}   & 0.9073 & 0.9790\\
         & C2 & {\footnotesize removal of features with correlation >= 90\%} & 0.8900 & 0.9791 \\
-        & C3 & {\footnotesize 10000 instances of downsampling} & 0.8627 & 0.9327 \\
-        & C4 & {\footnotesize 10000 instances of upsampling} & 0.9472 & 0.9470 \\
+        & C3 & {\footnotesize subject to downsampling} & 0.8627 & 0.9327 \\
+        & C4 & {\footnotesize subject to upsampling} & 0.9472 & 0.9470 \\
       \midrule
 
       \multirow{3}{*}{Decision Tree}
       & C5 & {\footnotesize dataset with no modifications}   & 0.9283 & 0.9963 \\
       & C6 & {\footnotesize removal of features with correlation >= 90\%} & 0.9268 & 0.9962 \\
-      & C7 & {\footnotesize 10000 instances of downsampling} & 0.8838 & 0.9878 \\
-      & C8 & {\footnotesize 10000 instances of upsampling} & 0.9976 & 0.9976 \\
+      & C7 & {\footnotesize subject to downsampling} & 0.8838 & 0.9878 \\
+      & C8 & {\footnotesize subject to upsampling} & 0.9976 & 0.9976 \\
       \midrule
 
       \multirow{3}{*}{SCV}
       & C9 & {\footnotesize dataset with no modifications}   & 0.9296 & 0.9932 \\
       & C10 & {\footnotesize removal of features with correlation >= 90\%} & 0.9196 & 0.9932 \\
-      & C11 & {\footnotesize 10000 instances of downsampling} & 0.8816 & 0.9756 \\
-      & C12 & {\footnotesize 10000 instances of upsampling} & 0.9718 & 0.9716 \\
+      & C11 & {\footnotesize subject to downsampling} & 0.8816 & 0.9756 \\
+      & C12 & {\footnotesize subject to upsampling} & 0.9718 & 0.9716 \\
       \midrule
 
       \multirow{3}{*}{Neural Network}
       & C13 & {\footnotesize dataset with no modifications}   & 0.9518 & 0.9957 \\
       & C14 & {\footnotesize removal of features with correlation >= 90\%} & 0.9354 & 0.9354 \\
-      & C15 & {\footnotesize 10000 instances of downsampling} & 0.8963 & 0.9862 \\
-      & C16 & {\footnotesize 10000 instances of upsampling} & 0.9887 & 0.9888 \\
+      & C15 & {\footnotesize subject to downsampling} & 0.8963 & 0.9862 \\
+      & C16 & {\footnotesize subject to upsampling} & 0.9887 & 0.9888 \\
       \bottomrule
   \end{tabular}
   \caption{Classifier performance on the test set}
@@ -214,6 +214,9 @@ criterion=gini, splitter=best, default max depth
 Parameters for neural network (as determined through hyperparameter tuning):
 batch\_size=128, architecture=[128, 128], learning\_rate=0.0001, \\ iterations=50000
 
+<<<<<<< HEAD
+An online RT\_IoT(CPS) notebook \citep{ref13} was used as a baseline for comparison. The accuracy of their decision tree was 0.9943, while their multilayer neural network gave 0.9890. If you compare those results to our highest-performing results, our neural network that was trained on the dataset with no modification scored slightly higher by 0.0067. On the other hand, our decision tree, which was trained on data subject to upsampling, was higher by 0.0033. Therefore, while results were close, we were able to marginally improve in comparison to our baseline.
+=======
 \section{Progress}
 
 Following our progress report, our plan was to implement various other models to see how they compared to our neural network model. The models we intended to implement were a CNN, an RNN, a Decision Tree, and a Support Vector Machine. We have implemented two of these models: Decision Tree and Support Vector Machine. We decided not to implement the CNN or RNN because, after we learned more about them, we realized that they were not appropriate for our data and task. In particular, we originally thought an RNN might be useful due to its effectiveness with time-series data. This would have been appropriate had the data included time-stamped entries, but unfortunately each instance does not have individual packet information. In terms of the CNN, it also does not really make sense as the nature of our data does not follow a grid-like topology.
@@ -224,12 +227,16 @@ A third part of the plan was related to removing instances from the dataset in o
 
 The final part of the plan was adding another baseline that predicts a specific class every time. Our main interest in doing this was because of the large bias in the dataset. The idea was that this new baseline could predict better than it otherwise would with a dataset that has equally represented classes. Now that the dataset has been augmented to reduce the bias, this baseline is no longer relevant and as a result, we have decided not to include it.
 
+>>>>>>> f1b49df9f64f741acd0be41f9bcf2fcae081d106
 
 \section{Error Analysis}
 \label{sec:Error Analysis}
 
+Upon initial overall assessment, the model does fairly well across all 4 models that the data was testing. Consistently, models return the highest overall accuracy and f-scores for models that were trained on either the dataset with no modifications implemented or the data that implemented sampling. This means that there was no feature engineering or data selection that occurred. When analyzing the results, it is worth noting the drops in performance across all models when the dataset integrated downsampling. Given the increased performance from upsampling, this may be a warning sign that the higher-performing models are overfitting towards the classes that dominate the data. At the same time, the decreased performance from downsampling means that the model is likely sensitive to the loss of integrity within the dataset. If continuing to work on this model, this issue may have to be further addressed by further tailoring the dataset to ensure it prioritizes the representation of data that is classified in the minority without losing the integrity of the data. Even just looking at the diagonal row of the confusion matrix for upsampling demonstrated the promising, high results that are produced. 
 
+While overall accuracy and f-scores were derived to assess effectiveness of the model overall, error within our model was systematically broken down through confusion matrices and per-class data analysis that has been summarized in Table~\ref{tab:table2}, Table~\ref{tab:table3}, Table~\ref{tab:table4}, and Table~\ref{tab:table5}. When evaluating confusion matrices as well as the numerical values of accuracy, precision, and recall for each class, this allowed us to accurately assess how our model was handling each type of identification and to determine what areas of identification our model struggled with the most. When looking at these values, classes 3, 4, 7, 8, 9 and 10 all reported extremely high accuracy, precision and recall across all models. This shows that they were the easier classes to recognized, even on models that may not be as optimal for this dataset. Classes such as 1, 2 and 11 did have very high results in certain models. However, this was not consistent throughout all models. Interestingly enough, those 3 classes only reported at high, consistent levels for the decision tree model and neural network. What is ever more notable, especially with the neural network and decision tree, is that the performance across classes 2, 5, 6, and 12 shows significant improvements with the upsampling data. Relating back to what was said prior, this could be an indicator that those features are very sensitive to loss in data integrity.  To address this issue, further upsampling, data augmentation, and regularization should be considered in the training implementation to reduce dependency on certain samples within the data. 
 
+One final consideration to keep in mind is when further addressing issues in the code is that feature engineering can completely compromise the ability to identify certain classes, notably class 6. Even when the correlation threshold is 90%. Even ignoring this loss of class data, the classifiers that implement features show little to no improvement across all models. If further work is done to experiment with feature removal, the relationship between classes and each feature should be carefully reviewed in the decision to remove a feature since feature comparison has proved inadequate alone. 
 
 \section*{Team Contributions}
 
@@ -249,7 +256,7 @@ Contribution Summary: For the code, I created the model definition, as well as t
 
 Key Contribution Area: Model \& Training Loop Definition 
 
-Contribution Summary: For the code, I implemented training with hyperparameter tuning, testing and graph visualization . For the report, I wrote a paragraph in the Model Implementation regarding justification for the chosen hyperparameter tuning method of random search as well as Evaluation \& Results, the Appendix, and LaTeX formatting.
+Contribution Summary: For the code, I implemented training with hyperparameter tuning, testing and graph visualization . For the report, I wrote the Results,  Error Analysis and Appendix figures.
 
 % Bibliography entries for the entire Anthology, followed by custom entries
 %\bibliography{custom,anthology-overleaf-1,anthology-overleaf-2}
@@ -261,6 +268,10 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
 \clearpage  
 \section{Appendix}
 \label{sec:appendix}
+
+The mapping between dataset class identities and their table references across Table~\ref{tab:table2}, Table~\ref{tab:table3}, Table~\ref{tab:table4}, Table~\ref{tab:table5} is as follows:
+1 = DOS\_SYN\_Hping, 2 = ARP\_poisioning, 3 = NMAP\_UDP\_SCAN, 4 = NMAP\_XMAS\_TREE\_SCAN, 5 = NMAP\_OS\_DETECTION, 
+6 = NMAP\_TCP\_scan, 7 = DDOS\_Slowloris, 8 = Metasploit\_Brute\_Force\_SSH, 9 = NMAP\_FIN\_SCAN, 10 = MQTT\_Publish, 11 = Thing\_speak, 12 = Wipro\_bulb
 
 \begin{table*} [h]
   \centering
@@ -522,7 +533,7 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
 \begin{figure*}[h]
   \includegraphics[width=0.9\textwidth]{figures/figure16.png}
   \caption{
-        Results for the top-performing model configurations across batch sizes. Data was reduced to 10,000 instances Data was reduced to 10,000 instances from upsampling.
+        Results for the top-performing model configurations across batch sizes. Data was subject to upsampling.
         (a) Training Loss (top-left). (b) Validation Loss (top-right).
         (c) Training F-score (bottom-left). (d) Validation F-score (bottom-right).
     }
@@ -534,7 +545,7 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
   \includegraphics[width=0.9\textwidth]{figures/figure17.png}
   \caption{
       Results for the top-performing model configurations across learning rates where dataset remained unmodified. 
-      (1e{-1}, 5e{-2}, 1e{-2}, 5e{-3}). Data was reduced to 10,000 instances from upsampling.
+      (1e{-1}, 5e{-2}, 1e{-2}, 5e{-3}). Data was subject to .
       (a) Training Loss (top-left).
       (b) Validation Loss (top-right).
       (c) Training F-score (bottom-left).
@@ -548,7 +559,7 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
   \includegraphics[width=0.9\textwidth]{figures/figure18.png}
   \caption{
       Results for the top-performing model configurations across maximum iteration counts
-      (2000, 5000, 10000, 50000). Data was reduced to 10,000 instances from upsampling.
+      (2000, 5000, 10000, 50000). Data was subject to upsampling.
       (a) Training Loss (top-left).
       (b) Validation Loss (top-right).
       (c) Training F-score (bottom-left).
@@ -588,7 +599,7 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
 \begin{figure*}[h]
   \includegraphics[width=0.9\textwidth]{figures/figure13.png}
   \caption{
-    Confusion matrices for the SVC (left) and neural network (right) baselines when all data given was used..
+    Confusion matrices for the SVC (left) and neural network (right) baselines when all data given was used.
   }
   \label{fig:figure13}
 \end{figure*}
@@ -597,7 +608,7 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
 \begin{figure*}[h]
   \includegraphics[width=0.9\textwidth]{figures/figure14.png}
   \caption{
-    Confusion matrices for the logistic regression (left) and decision tree (right) baselines when data was reduced to 10,000 instances of dos\_syn\_hping.
+    Confusion matrices for the logistic regression (left) and decision tree (right) baselines when data was reduced to 10,000 instances of downsampling.
   }
   \label{fig:figure14}
 \end{figure*}
@@ -606,9 +617,27 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
 \begin{figure*}[h]
   \includegraphics[width=0.9\textwidth]{figures/figure15.png}
   \caption{
-    Confusion matrices for the SVC (left) and neural network (right) baselines when all data was reduced to 10,000 instances of dos\_syn\_hping.
+    Confusion matrices for the SVC (left) and neural network (right) baselines when all data was reduced to 10,000 instances of downsampling.
   }
   \label{fig:figure15}
+\end{figure*}
+\vspace{-4pt}
+
+\begin{figure*}[h]
+  \includegraphics[width=0.9\textwidth]{figures/figure19.png}
+  \caption{
+    Confusion matrices for the logistic regression (left) and decision tree (right) baselines when data was subject to upsampling.
+  }
+  \label{fig:figure19}
+\end{figure*}
+\vspace{-4pt}
+
+\begin{figure*}[h]
+  \includegraphics[width=0.9\textwidth]{figures/figure20.png}
+  \caption{
+    Confusion matrices for the SVC (left) and neural network (right) baselines when all data was subject to upsampling.
+  }
+  \label{fig:figure20}
 \end{figure*}
 \vspace{-4pt}
 
