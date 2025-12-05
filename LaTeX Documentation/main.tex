@@ -93,38 +93,7 @@ The majority of the features for our dataset were created using the Zeek network
 
 No feature engineering was done as all the features were already given in the dataset.
 
-For feature selection, id, id.orig\_p, and id.resp\_p are not indicators of benign/malicious network activity. Additionally, from profiling the dataset, we know that the bwd\_URG\_flag\_count feature is a constant value across all instances. For the above reasons, we should not include id, id.orig\_p, id.resp\_p, or bwd\_URG\_flag\_count in our feature set. We have tried both keeping all other features, as well as removing features that have high (absolute) correlation with each other. In the latter case, we removed features (one in a pair) with an absolute correlation equal to or above 0.9. This resulted in the removal of 29 features:
-\begin{itemize}
-  \item fwd\_pkts\_tot
-  \item bwd\_data\_pkts\_tot
-  \item fwd\_pkts\_per\_sec
-  \item flow\_pkts\_per\_sec
-  \item fwd\_header\_size\_min
-  \item bwd\_header\_size\_tot
-  \item bwd\_header\_size\_min
-  \item flow\_ACK\_flag\_count
-  \item fwd\_pkts\_payload.std
-  \item bwd\_pkts\_payload.tot
-  \item bwd\_pkts\_payload.std
-  \item flow\_pkts\_payload.max
-  \item flow\_pkts\_payload.tot
-  \item fwd\_iat.max
-  \item fwd\_iat.tot
-  \item fwd\_iat.std
-  \item bwd\_iat.std
-  \item flow\_iat.tot
-  \item flow\_iat.std
-  \item payload\_bytes\_per\_second
-  \item bwd\_subflow\_bytes
-  \item fwd\_bulk\_packets
-  \item bwd\_bulk\_packets
-  \item active.max
-  \item idle.min
-  \item idle.max
-  \item idle.tot
-  \item idle.avg
-  \item proto\_udp
-\end{itemize}
+For feature selection, id, id.orig\_p, and id.resp\_p are not indicators of benign/malicious network activity. Additionally, from profiling the dataset, we know that the bwd\_URG\_flag\_count feature is a constant value across all instances. For the above reasons, we should not include id, id.orig\_p, id.resp\_p, or bwd\_URG\_flag\_count in our feature set. We have tried both keeping all other features, as well as removing features that have high (absolute) correlation with each other. In the latter case, we removed features (one in a pair) with an absolute correlation equal to or above 0.9. This resulted in the removal of 29 features; these removed features are listed in \ref{tab:table7}.
 
 The only feature augmentation we performed was normalizing the data as described in Section \ref{sec:Preprocessing}.
 
@@ -824,6 +793,73 @@ The mapping between dataset class identities and their table references across T
     fwd\_last\_window\_size & The window size in bytes the last packet in the forward direction has. The windows scale parameter is currently ignored, as this is only set in a SYN packet but we currently look at any packet. \\
     \hline
     bwd\_last\_window\_size & The window size in bytes the last packet in the backward direction has. The windows scale parameter is currently ignored, as this is only set in a SYN packet but we currently look at any packet. \\
+    \hline
+  \end{tabular}
+\end{table*}
+
+\begin{table*}
+  \centering
+  \caption{Removed Features Based on 0.9 Absolute Correlation Threshold}
+  \label{tab:table7}
+  \begin{tabular}{|l|p{12cm}|}
+    \hline
+    fwd\_pkts\_tot
+    \hline
+    bwd\_data\_pkts\_tot
+    \hline
+    fwd\_pkts\_per\_sec
+    \hline
+    flow\_pkts\_per\_sec
+    \hline
+    fwd\_header\_size\_min
+    \hline
+    bwd\_header\_size\_tot
+    \hline
+    bwd\_header\_size\_min
+    \hline
+    flow\_ACK\_flag\_count
+    \hline
+    fwd\_pkts\_payload.std
+    \hline
+    bwd\_pkts\_payload.tot
+    \hline
+    bwd\_pkts\_payload.std
+    \hline
+    flow\_pkts\_payload.max
+    \hline
+    flow\_pkts\_payload.tot
+    \hline
+    fwd\_iat.max
+    \hline
+    fwd\_iat.tot
+    \hline
+    fwd\_iat.std
+    \hline
+    bwd\_iat.std
+    \hline
+    flow\_iat.tot
+    \hline
+    flow\_iat.std
+    \hline
+    payload\_bytes\_per\_second
+    \hline
+    bwd\_subflow\_bytes
+    \hline
+    fwd\_bulk\_packets
+    \hline
+    bwd\_bulk\_packets
+    \hline
+    active.max
+    \hline
+    idle.min
+    \hline
+    idle.max
+    \hline
+    idle.tot
+    \hline
+    idle.avg
+    \hline
+    proto\_udp
     \hline
   \end{tabular}
 \end{table*}
