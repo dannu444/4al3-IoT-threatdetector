@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex main"] 1764894335.90595 "main.aux" "main.bbl" "main" 1764895462.68576 0
+["bibtex main"] 1764901639.89678 "main.aux" "main.bbl" "main" 1764901653.83118 0
   "./acl_natbib.bst" 1764859454.90457 45186 3d1af46d62cc9172ef6e42b56c1cd613 ""
-  "./custom.bib" 1764859454.90467 3072 d5c96279ac9e36a51eff69c86a2a0df2 ""
-  "main.aux" 1764895462.49454 15233 0ec2401a48894cf320c32520d3e805bc "pdflatex"
+  "./custom.bib" 1764901583.89524 3332 79523336ff4a43977bb66f43892bdb8a ""
+  "main.aux" 1764901653.63565 15920 eab1c7d136c4a80360200f0b0c016e4a "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1764895456.43723 "/Users/oliviareich/Desktop/final-project-4AL3/LaTeX Documentation/main.tex" "main.pdf" "main" 1764895462.68587 0
-  "/Users/oliviareich/Desktop/final-project-4AL3/LaTeX Documentation/main.tex" 1764895451.67095 45133 22cbd7506242b3d8414c3ebdec66398d ""
+["pdflatex"] 1764901646.95749 "/Users/oliviareich/Desktop/final-project-4AL3/LaTeX Documentation/main.tex" "main.pdf" "main" 1764901653.83131 2
+  "/Users/oliviareich/Desktop/final-project-4AL3/LaTeX Documentation/main.tex" 1764901635.10085 49841 9645e39e9325b12be27524b299ee9f72 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc" 1558214095 7631 5169ff1acd97ff1c4ab83563c99f96f4 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -34,6 +34,9 @@
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasy10.tfm" 1136768653 520 82a3d37183f34b6eb363a161dfc002c2 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasy6.tfm" 1136768653 520 4889cce2180234b97cad636b6039c722 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasy8.tfm" 1136768653 520 7bb3abb160b19e0ed6ac404bb59052b7 ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1248133631 35469 70d41d2b9ea31d5d813066df7c99281c ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb" 1558214095 55526 184de5d68af8c544d6d1653244a2b006 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmb8a.pfb" 1136849748 44729 811d6c62865936705a31c797a1d5dada ""
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb" 1136849748 46026 6dab18b61c907687b520c72847215a68 ""
@@ -131,7 +134,9 @@
   "figures/figure16.png" 1764894276.29847 805779 2fa245a86610ad1ca47ba361a51927f1 ""
   "figures/figure17.png" 1764894276.29563 1470405 e9f228c3877013ec48861fe4e3de9879 ""
   "figures/figure18.png" 1764894276.28821 830469 ac2b0c5389dcc3058351f4653fe4dbe3 ""
+  "figures/figure19.png" 1764896492.06993 718428 8f72dc66e94ff8391a79ecf327ec7c24 ""
   "figures/figure2.png" 1764876060.99882 810388 f9222efc0c927b358745a55423c86563 ""
+  "figures/figure20.png" 1764896492.08057 698355 3225599590cbc12ab014cdfdea42808f ""
   "figures/figure3.png" 1764876061.00067 836576 9afe8e89048d863d861ce17099f97f10 ""
   "figures/figure4.png" 1764876061.00255 713491 b7230267e861e18c8a931fa5d1584d3e ""
   "figures/figure5.png" 1764876061.00402 787410 8ba6a7e7925d4ab9f4de03cfb2bdb7e5 ""
@@ -139,10 +144,10 @@
   "figures/figure7.png" 1764876061.00981 720035 b20a75104dec6923762f148989bdee04 ""
   "figures/figure8.png" 1764876061.0112 801765 1586ecbe278854173862cec15858103e ""
   "figures/figure9.png" 1764876061.01277 838052 5f51c44297230e7c4741627f44b61505 ""
-  "main.aux" 1764895462.49454 15233 0ec2401a48894cf320c32520d3e805bc "pdflatex"
-  "main.bbl" 1764894336.01779 2725 43f53cff68fd9628099a409b7e649fb3 "bibtex main"
-  "main.out" 1764895462.49553 1983 5d17a1644e9a1125dc9056d597b7042c "pdflatex"
-  "main.tex" 1764895451.67095 45133 22cbd7506242b3d8414c3ebdec66398d ""
+  "main.aux" 1764901653.63565 15920 eab1c7d136c4a80360200f0b0c016e4a "pdflatex"
+  "main.bbl" 1764901639.97609 2725 43f53cff68fd9628099a409b7e649fb3 "bibtex main"
+  "main.out" 1764901653.63649 1983 5d17a1644e9a1125dc9056d597b7042c "pdflatex"
+  "main.tex" 1764901635.10085 49841 9645e39e9325b12be27524b299ee9f72 ""
   (generated)
   "main.aux"
   "main.log"
