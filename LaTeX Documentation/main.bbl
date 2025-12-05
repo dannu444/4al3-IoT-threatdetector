@@ -1,5 +1,10 @@
-\begin{thebibliography}{8}
+\begin{thebibliography}{10}
 \providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Brodersen et~al.(2025)Brodersen, Reich, and Maurer}]{ref9}
+J.~Brodersen, O.~Reich, and D.~Maurer. 2025.
+\newblock \href {https://github.com/dannu444/4al3-IoT-threatdetector} {4al3 iot threat detector}.
+\newblock Accessed 11 October 2025.
 
 \bibitem[{Cooper(2025)}]{ref3}
 S.~Cooper. 2025.
@@ -10,6 +15,11 @@ S.~Cooper. 2025.
 J.~Fesl and M.~Naas. 2025.
 \newblock A comprehensive machine learning-based approach for virtual private network traffic detection, classification and hiding.
 \newblock \emph{Computer Networks}, 270.
+
+\bibitem[{Gambazzi(2025)}]{ref10}
+L.~Gambazzi. 2025.
+\newblock \href {https://github.com/zeek-flowmeter/zeek-flowmeter} {Zeek flowmeter}.
+\newblock Accessed 11 October 2025.
 
 \bibitem[{Katigbak(2025)}]{ref1}
 R.~Katigbak. 2025.
