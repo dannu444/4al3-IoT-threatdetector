@@ -214,9 +214,8 @@ criterion=gini, splitter=best, default max depth
 Parameters for neural network (as determined through hyperparameter tuning):
 batch\_size=128, architecture=[128, 128], learning\_rate=0.0001, \\ iterations=50000
 
-<<<<<<< HEAD
 An online RT\_IoT(CPS) notebook \citep{ref13} was used as a baseline for comparison. The accuracy of their decision tree was 0.9943, while their multilayer neural network gave 0.9890. If you compare those results to our highest-performing results, our neural network that was trained on the dataset with no modification scored slightly higher by 0.0067. On the other hand, our decision tree, which was trained on data subject to upsampling, was higher by 0.0033. Therefore, while results were close, we were able to marginally improve in comparison to our baseline.
-=======
+
 \section{Progress}
 
 Following our progress report, our plan was to implement various other models to see how they compared to our neural network model. The models we intended to implement were a CNN, an RNN, a Decision Tree, and a Support Vector Machine. We have implemented two of these models: Decision Tree and Support Vector Machine. We decided not to implement the CNN or RNN because, after we learned more about them, we realized that they were not appropriate for our data and task. In particular, we originally thought an RNN might be useful due to its effectiveness with time-series data. This would have been appropriate had the data included time-stamped entries, but unfortunately each instance does not have individual packet information. In terms of the CNN, it also does not really make sense as the nature of our data does not follow a grid-like topology.
@@ -227,7 +226,6 @@ A third part of the plan was related to removing instances from the dataset in o
 
 The final part of the plan was adding another baseline that predicts a specific class every time. Our main interest in doing this was because of the large bias in the dataset. The idea was that this new baseline could predict better than it otherwise would with a dataset that has equally represented classes. Now that the dataset has been augmented to reduce the bias, this baseline is no longer relevant and as a result, we have decided not to include it.
 
->>>>>>> f1b49df9f64f741acd0be41f9bcf2fcae081d106
 
 \section{Error Analysis}
 \label{sec:Error Analysis}
@@ -236,7 +234,7 @@ Upon initial overall assessment, the model does fairly well across all 4 models 
 
 While overall accuracy and f-scores were derived to assess effectiveness of the model overall, error within our model was systematically broken down through confusion matrices and per-class data analysis that has been summarized in Table~\ref{tab:table2}, Table~\ref{tab:table3}, Table~\ref{tab:table4}, and Table~\ref{tab:table5}. When evaluating confusion matrices as well as the numerical values of accuracy, precision, and recall for each class, this allowed us to accurately assess how our model was handling each type of identification and to determine what areas of identification our model struggled with the most. When looking at these values, classes 3, 4, 7, 8, 9 and 10 all reported extremely high accuracy, precision and recall across all models. This shows that they were the easier classes to recognized, even on models that may not be as optimal for this dataset. Classes such as 1, 2 and 11 did have very high results in certain models. However, this was not consistent throughout all models. Interestingly enough, those 3 classes only reported at high, consistent levels for the decision tree model and neural network. What is ever more notable, especially with the neural network and decision tree, is that the performance across classes 2, 5, 6, and 12 shows significant improvements with the upsampling data. Relating back to what was said prior, this could be an indicator that those features are very sensitive to loss in data integrity.  To address this issue, further upsampling, data augmentation, and regularization should be considered in the training implementation to reduce dependency on certain samples within the data. 
 
-One final consideration to keep in mind is when further addressing issues in the code is that feature engineering can completely compromise the ability to identify certain classes, notably class 6. Even when the correlation threshold is 90%. Even ignoring this loss of class data, the classifiers that implement features show little to no improvement across all models. If further work is done to experiment with feature removal, the relationship between classes and each feature should be carefully reviewed in the decision to remove a feature since feature comparison has proved inadequate alone. 
+One final consideration to keep in mind is when further addressing issues in the code is that feature engineering can completely compromise the ability to identify certain classes, notably class 6. Even when the correlation threshold is 90\%. Even ignoring this loss of class data, the classifiers that implement features show little to no improvement across all models. If further work is done to experiment with feature removal, the relationship between classes and each feature should be carefully reviewed in the decision to remove a feature since feature comparison has proved inadequate alone.
 
 \section*{Team Contributions}
 
@@ -250,13 +248,13 @@ Contribution Summary: In terms of the code, I worked on the preprocessing, profi
 
 Key Contribution Area: Model \& Training Loop Definition 
 
-Contribution Summary: For the code, I created the model definition, as well as the training loop. For the report, I wrote the Model Implementation, Introduction, and Related Work.
+Contribution Summary: For the code, I created the model definitions, the training loop, and statistics. For the report, I wrote the Model Implementation, Introduction, and Related Work.
 
 \subsection{Olivia Reich}
 
 Key Contribution Area: Model \& Training Loop Definition 
 
-Contribution Summary: For the code, I implemented training with hyperparameter tuning, testing and graph visualization . For the report, I wrote the Results,  Error Analysis and Appendix figures.
+Contribution Summary: For the code, I implemented training with hyperparameter tuning, testing and graph visualization. For the report, I wrote the Results,  Error Analysis and Appendix figures.
 
 % Bibliography entries for the entire Anthology, followed by custom entries
 %\bibliography{custom,anthology-overleaf-1,anthology-overleaf-2}
