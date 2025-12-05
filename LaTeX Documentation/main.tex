@@ -74,6 +74,11 @@ After preprocessing, the input data has 91 features. The increased number of fea
 
 This preprocessed version of the input and target can be created from the original dataset using the preprocess.py script.
 
+\subsection{Post-Progress Report Changes}
+\label{sec:Post-Progress Report Changes}
+
+There is one change we made to the dataset between the progress report and this final version. As mentioned above, the dos_syn_hping target class represents 76.9\% of the dataset. This creates bias in the dataset, and we believe that this is a factor in making the dataset too easy. We tried to address this bias in a few different ways. First, we first tried downsampling by making all classes have the same number of instances (using the target class with the smallest number of instances). Unfortunately, by doing this, there are not enough instances in the dataset as required by the project (328<1000) as well as not a meaningful number of training instances to properly train the model. Because of this, instead of removing instances from other target classes, we tried randomly sampling 10,000 instances from the dos_syn_hping target class. This preserves its place as the largest target class represented, but now only takes up ~26\% of the dataset. The final approach we used was upsampling the training data. This was done by keeping the most represented class in the training set the same, but then randomly duplicating instances of the less represented classes until all target classes are equally represented in the training data.
+
 \section{Features}
 \label{sec:Features}
 
@@ -85,8 +90,41 @@ The majority of the features for our dataset were created using the Zeek network
   \item proto: This is the transport layer protocol of the communication.
   \item service: This is the application layer protocol of the communication.
 \end{itemize}
+
 No feature engineering was done as all the features were already given in the dataset.
-For feature selection, id, id.orig\_p, and id.resp\_p are not indicators of benign/malicious network activity. Additionally, from profiling the dataset, we know that the bwd\_URG\_flag\_count feature is a constant value across all instances. For the above reasons, we should not include id, id.orig\_p, id.resp\_p, or bwd\_URG\_flag\_count in our feature set. As recommended by our TA (discussed in more detail in Section \ref{sec:Feedback and Plans}), we do not further reduce the number of features other than the exceptions listed above. Instead, we feed all the features into the neural network.
+
+For feature selection, id, id.orig\_p, and id.resp\_p are not indicators of benign/malicious network activity. Additionally, from profiling the dataset, we know that the bwd\_URG\_flag\_count feature is a constant value across all instances. For the above reasons, we should not include id, id.orig\_p, id.resp\_p, or bwd\_URG\_flag\_count in our feature set. We have tried both keeping all other features, as well as removing features that have high (absolute) correlation with each other. In the latter case, we removed features (one in a pair) with an absolute correlation equal to or above 0.9. This resulted in the removal of 29 features:
+\begin{itemize}
+  \item fwd\_pkts\_tot
+  \item bwd\_data\_pkts\_tot
+  \item fwd\_pkts\_per\_sec
+  \item flow\_pkts\_per\_sec
+  \item fwd\_header\_size\_min
+  \item bwd\_header\_size\_tot
+  \item bwd\_header\_size\_min
+  \item flow\_ACK\_flag\_count
+  \item fwd\_pkts\_payload.std
+  \item bwd\_pkts\_payload.tot
+  \item bwd\_pkts\_payload.std
+  \item flow\_pkts\_payload.max
+  \item flow\_pkts\_payload.tot
+  \item fwd\_iat.max
+  \item fwd\_iat.tot
+  \item fwd\_iat.std
+  \item bwd\_iat.std
+  \item flow\_iat.tot
+  \item flow\_iat.std
+  \item payload\_bytes\_per\_second
+  \item bwd\_subflow\_bytes
+  \item fwd\_bulk\_packets
+  \item bwd\_bulk\_packets
+  \item active.max
+  \item idle.min
+  \item idle.max
+  \item idle.tot
+  \item idle.avg
+  \item proto\_udp
+\end{itemize}
 
 The only feature augmentation we performed was normalizing the data as described in Section \ref{sec:Preprocessing}.
 
@@ -118,6 +156,7 @@ During hyperparameter tuning, there were 3 batch options, 4 learning rate option
 During the progress report, the only metrics used for evaluation were F-scores and loss. These remain our primary metrics for assessing the progress of our neural network model. This means that they are the only metrics we track throughout the training iteration of our neural network model. These metrics proved sufficient to be able to assess whether the model shows meaningful trends throughout the learning process. However, we expanded metrics for the final evaluation. In addition to F-score and loss, the following metrics were added for final evaluation: overall accuracy, accuracy (per class), precision (per class), and recall (per class). Due to the high results achieved from our model, these metrics were added to provide a more fine-grained understanding of where our model could be improved. The metrics that evaluate per-class data are particularly important additions in this regard because they help break down where failure in the model may be occurring. This is especially true if it can be linked back to high failure within specific classes.
 
 \subsection{Results}
+\label{sec:Results}
 
 \balance
 \begin{table*}[b!]
@@ -174,6 +213,16 @@ criterion=gini, splitter=best, default max depth
 
 Parameters for neural network (as determined through hyperparameter tuning):
 batch\_size=128, architecture=[128, 128], learning\_rate=0.0001, \\ iterations=50000
+
+\section{Progress}
+
+Following our progress report, our plan was to implement various other models to see how they compared to our neural network model. The models we intended to implement were a CNN, an RNN, a Decision Tree, and a Support Vector Machine. We have implemented two of these models: Decision Tree and Support Vector Machine. We decided not to implement the CNN or RNN because, after we learned more about them, we realized that they were not appropriate for our data and task. In particular, we originally thought an RNN might be useful due to its effectiveness with time-series data. This would have been appropriate had the data included time-stamped entries, but unfortunately each instance does not have individual packet information. In terms of the CNN, it also does not really make sense as the nature of our data does not follow a grid-like topology.
+
+A second part of our plan was related to the feature selection process. We planned to see how removing highly correlated features affected the performance of our model. We have implemented this as described in the \ref{sec:Features} section. We also planned to try selecting features by using the top performing linear regressions as the feature set (where the exact number of features to include can be determined as a hyperparameter). However, we decided not to do this as the correlation feature selection did not really affect performance (described in the \ref{sec:Results} section). Note that this aligns with TA feedback we received in which we were told that Neural Networks can often handle features themselves.
+
+A third part of the plan was related to removing instances from the dataset in order to have a more equal distribution of target classes. Our original dataset had a large bias. Namely, one target class made up 76.9\% of the dataset, and as such, if the model was in doubt, it could choose this class and be right much more frequently than if the classes distribution was more equal. We tried a few different methods to address this bias; these methods are described in the \ref{sec:Post-Progress Report Changes} subsection.
+
+The final part of the plan was adding another baseline that predicts a specific class every time. Our main interest in doing this was because of the large bias in the dataset. The idea was that this new baseline could predict better than it otherwise would with a dataset that has equally represented classes. Now that the dataset has been augmented to reduce the bias, this baseline is no longer relevant and as a result, we have decided not to include it.
 
 
 \section{Error Analysis}
