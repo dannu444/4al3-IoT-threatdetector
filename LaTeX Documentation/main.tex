@@ -123,61 +123,57 @@ During the progress report, the only metrics used for evaluation were F-scores a
       \multirow{3}{*}{Logistic Regression}
         & C1 & {\footnotesize dataset with no modifications}   & 0.9073 & 0.9790\\
         & C2 & {\footnotesize removal of features with correlation >= 90\%} & 0.8900 & 0.9791 \\
-        & C3 & {\footnotesize 10000 instances of dos\_syn\_hping} & 0.8627 & 0.9327 \\
+        & C3 & {\footnotesize 10000 instances of downsampling} & 0.8627 & 0.9327 \\
+        & C4 & {\footnotesize 10000 instances of upsampling} & 0.9472 & 0.9470 \\
       \midrule
 
       \multirow{3}{*}{Decision Tree}
-      & C4 & {\footnotesize dataset with no modifications}   & 0.9283 & 0.9963 \\
-      & C5 & {\footnotesize removal of features with correlation >= 90\%} & 0.9268 & 0.9962 \\
-      & C6 & {\footnotesize 10000 instances of dos\_syn\_hping} & 0.8838 & 0.9878 \\
+      & C5 & {\footnotesize dataset with no modifications}   & 0.9283 & 0.9963 \\
+      & C6 & {\footnotesize removal of features with correlation >= 90\%} & 0.9268 & 0.9962 \\
+      & C7 & {\footnotesize 10000 instances of downsampling} & 0.8838 & 0.9878 \\
+      & C8 & {\footnotesize 10000 instances of upsampling} & 0.9976 & 0.9976 \\
       \midrule
 
       \multirow{3}{*}{SCV}
-      & C7 & {\footnotesize dataset with no modifications}   & 0.9296 & 0.9932 \\
-      & C8 & {\footnotesize removal of features with correlation >= 90\%} & 0.9196 & 0.9932 \\
-      & C9 & {\footnotesize 10000 instances of dos\_syn\_hping} & 0.8816 & 0.9756 \\
+      & C9 & {\footnotesize dataset with no modifications}   & 0.9296 & 0.9932 \\
+      & C10 & {\footnotesize removal of features with correlation >= 90\%} & 0.9196 & 0.9932 \\
+      & C11 & {\footnotesize 10000 instances of downsampling} & 0.8816 & 0.9756 \\
+      & C12 & {\footnotesize 10000 instances of upsampling} & 0.9718 & 0.9716 \\
       \midrule
 
       \multirow{3}{*}{Neural Network}
-      & C10 & {\footnotesize dataset with no modifications}   & 0.9518 & 0.9957 \\
-      & C11 & {\footnotesize removal of features with correlation >= 90\%} & 0.9354 & 0.9354 \\
-      & C12 & {\footnotesize 10000 instances of dos\_syn\_hping} & 0.8963 & 0.9862 \\
+      & C13 & {\footnotesize dataset with no modifications}   & 0.9518 & 0.9957 \\
+      & C14 & {\footnotesize removal of features with correlation >= 90\%} & 0.9354 & 0.9354 \\
+      & C15 & {\footnotesize 10000 instances of downsampling} & 0.8963 & 0.9862 \\
+      & C16 & {\footnotesize 10000 instances of upsampling} & 0.9887 & 0.9888 \\
       \bottomrule
   \end{tabular}
   \caption{Classifier performance on the test set}
+  \label{tab:table1}
 \end{table*}
+
+Overall results are summarized in Table~\ref{tab:table1}. Further detailed results regarding per-class performance across the different models have been included in the Appendix for reference and can be summarized within the following tables: Table~\ref{tab:table2}, Table~\ref{tab:table3}, Table~\ref{tab:table4}, Table~\ref{tab:table5}
+
+Details regarding the models' parameters used to derive these results have been included below.
 
 Parameters for logistic regression basline: \\
 optimizer=adam, batch\_size=64, iterations=10000, learning\_rate=0.001, 
 
-
-Parameters for decision tree baseline: \\
+Parameters for decision tree baseline: 
 kernel=rbf, C=1.0, gamma=scale
 
 Parameters for SCV:
 criterion=gini, splitter=best, default max depth
 
-Parameters for neural network (as determined through hyperparameter tuning):\\
-architecture=[128, 128], batch\_size=128, learning\_rate=0.0001, iterations=50000
+Parameters for neural network (as determined through hyperparameter tuning):
+batch\_size=128, architecture=[128, 128], learning\_rate=0.0001, \\ iterations=50000
 
-\subsection{Evaluation of Results}
 
-When comparing validation and testing f-scores, the difference between the two is less than 1\%. This suggests that the model is generalizing well, as there are no signs of overfitting the data.
+\section{Error Analysis}
+\label{sec:Error Analysis}
 
-Overall, both validation and testing show improvement over the baseline f-score by approximately 5\%. This indicates that the hyperparameter tuning helps improve the model. However, the high baseline value may indicate dataset issues that should be further explored to rule out. Some of these issues may include class imbalance, low variability among samples, or an insufficiently diverse data distribution. This will likely be further explored in future development. 
 
-\section{Feedback and Plans}
-\label{sec:Feedback and Plans}
 
-Our first piece of feedback is related to our model selection. Initially, we were planning on implementing a convolutional neural network (CNN) as the authors of the dataset used, or a recurrent neural network (RNN) due to the sequential nature of our data. However, our TA suggested that before we try those, we should try a basic neural network as they can also be successful for our type of task. In the future, we plan to try and implement our initial idea of an RNN and CNN neural network to see how they compare to the basic neural network we have implemented. Additionally, per TA feedback, we intend to implement other types of models such as Decisions Trees and Support Vector Machines.
-
-Another piece of feedback we received is based on our feature selection process. We were unsure how to find unnecessary features in our dataset. Our TA suggested that we should first try not removing any features as neural networks can often handle the features themselves. However, if we did need to remove features, checking the correlation between features would be useful. For now, as suggested, we have used all the features (excluding the four discussed in Section \ref{sec:Features}). In the future, we plan to test whether removing features that already have another highly correlated feature in the dataset has a positive impact on the model performance. Another method we plan to try from TA feedback is plotting the linear regression of each feature vs. the target and using the top performing regressions as the feature set (where the exact number of features to include can be determined as a hyperparameter).
-
-A third piece of feedback we received is related to how to determine the number and size of hidden layers we should have in our neural network. The TA suggested experimenting with different sizes and numbers of layers using hyperparameter searching to find what works best. We have implemented this as described in Section \ref{sec:Implementation}.
-
-After initial evaluation of our model and baseline, we have seen very promising performance. One main concern we have, however, is bias in the dataset making it easier to predict correctly. Namely, one target class makes up 76.9\% of the dataset, and as such, if the model is in doubt, it can choose this class and be right much more frequently than if the classes were equally represented. As a next step, we plan to remove instances of the dataset with the intention to get a more equal distribution of target classes and evaluate how this affects the models’ performance.
-
-We also plan to add another baseline that predicts a specific class every time. We want to add this because it will allow us to see how our model compares against a non-learning, predefined approach. This could be especially interesting because one of our classes makes up a very large percentage of the instances in the dataset. Therefore, this new baseline could predict better than it otherwise would with a dataset that has equally represented classes.
 
 \section*{Team Contributions}
 
@@ -212,7 +208,6 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
 
 \begin{table*} [h]
   \centering
-  \caption{Per-class performance for Logistic Regression (rounded to 2 decimals)}
   \begin{tabular}{llcccccccccccc}
       \toprule
       ID & category & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\
@@ -234,8 +229,16 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
         & accuracy  & 0.82 & 0.84 & 1.00 & 1.00 & 0.67 & 0.75 & 1.00 & 0.98 & 0.97 & 1.00 & 0.90 & 0.50 \\
         & precision & 0.88 & 0.95 & 1.00 & 1.00 & 1.00 & 0.60 & 0.99 & 1.00 & 0.96 & 1.00 & 0.83 & 1.00 \\
         & recall    & 0.82 & 0.84 & 1.00 & 1.00 & 0.67 & 0.75 & 1.00 & 0.98 & 0.97 & 1.00 & 0.90 & 0.50 \\
-      \bottomrule
+      \midrule
+
+      \multirow{3}{*}{C4}
+        & accuracy  & 0.76 & 0.99 & 1.00 & 1.00 & 0.88 & 0.90 & 1.00 & 1.00 & 0.92 & 1.00 & 0.94 & 0.98 \\
+        & precision & 0.75 & 0.94 & 1.00 & 1.00 & 0.97 & 0.97 & 1.00 & 0.99 & 0.99 & 1.00 & 0.82 & 0.95 \\
+        & recall    & 0.76 & 0.99 & 1.00 & 1.00 & 0.88 & 0.90 & 1.00 & 1.00 & 0.92 & 1.00 & 0.94 & 0.98 \\
+  \bottomrule
   \end{tabular}
+  \caption{Per-class performance for Logistic Regression (rounded to 2 decimals)}
+  \label{tab:table2}
 \end{table*}
 
 \begin{table*} [h]
@@ -245,25 +248,31 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
       ID & category & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\
       \midrule
 
-      \multirow{3}{*}{C4}
+      \multirow{3}{*}{C5}
         & accuracy  & 0.99 & 0.89 & 1.00 & 1.00 & 0.67 & 0.75 & 1.00 & 1.00 & 0.97 & 1.00 & 0.98 & 0.97 \\
         & precision & 0.98 & 0.97 & 1.00 & 1.00 & 0.67 & 0.60 & 1.00 & 1.00 & 0.97 & 1.00 & 0.98 & 0.94 \\
         & recall    & 0.99 & 0.89 & 1.00 & 1.00 & 0.67 & 0.75 & 1.00 & 1.00 & 0.97 & 1.00 & 0.98 & 0.97 \\
       \midrule
 
-      \multirow{3}{*}{C5}
+      \multirow{3}{*}{C6}
         & accuracy  & 0.99 & 0.87 & 1.00 & 1.00 & 1.00 & 0.00 & 1.00 & 1.00 & 0.99 & 1.00 & 0.97 & 0.90 \\
         & precision & 0.97 & 0.96 & 1.00 & 1.00 & 0.75 & 0.00 & 1.00 & 1.00 & 0.96 & 1.00 & 0.99 & 0.90 \\
         & recall    & 0.99 & 0.87 & 1.00 & 1.00 & 1.00 & 0.00 & 1.00 & 1.00 & 0.99 & 1.00 & 0.97 & 0.90 \\
       \midrule
 
-      \multirow{3}{*}{C6}
+      \multirow{3}{*}{C7}
         & accuracy  & 0.99 & 0.90 & 1.00 & 1.00 & 0.67 & 0.75 & 1.00 & 0.99 & 0.96 & 1.00 & 0.98 & 0.97 \\
         & precision & 0.98 & 0.95 & 1.00 & 1.00 & 0.67 & 0.60 & 1.00 & 0.99 & 0.96 & 0.99 & 0.99 & 0.94 \\
         & recall    & 0.99 & 0.90 & 1.00 & 1.00 & 0.67 & 0.75 & 1.00 & 0.99 & 0.96 & 1.00 & 0.98 & 0.97 \\
-      \bottomrule
+      \midrule
+
+      \multirow{3}{*}{C8}
+        & accuracy  & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 0.98 & 1.00 \\
+        & precision & 0.98 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+        & recall    & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 0.98 & 1.00 \\
   \end{tabular}
   \caption{Per-class performance for Decision Tree (rounded to 2 decimals)}
+  \label{tab:table3}
 \end{table*}
 
 \begin{table*} [h]
@@ -273,25 +282,32 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
       ID & category & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\
       \midrule
 
-      \multirow{3}{*}{C7}
+      \multirow{3}{*}{C9}
         & accuracy  & 0.99 & 0.84 & 1.00 & 0.99 & 0.67 & 0.75 & 1.00 & 0.98 & 0.97 & 1.00 & 0.95 & 0.57 \\
         & precision & 0.94 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 0.96 & 1.00 & 0.98 & 0.94 \\
         & recall    & 0.99 & 0.84 & 1.00 & 0.99 & 0.67 & 0.75 & 1.00 & 0.98 & 0.97 & 1.00 & 0.95 & 0.57 \\
       \midrule
 
-      \multirow{3}{*}{C8}
+      \multirow{3}{*}{C10}
         & accuracy  & 0.98 & 0.82 & 1.00 & 1.00 & 1.00 & 0.00 & 1.00 & 1.00 & 0.99 & 1.00 & 0.93 & 0.70 \\
         & precision & 0.92 & 1.00 & 1.00 & 1.00 & 1.00 & 0.00 & 1.00 & 1.00 & 0.96 & 1.00 & 0.98 & 0.93 \\
         & recall    & 0.98 & 0.82 & 1.00 & 1.00 & 1.00 & 0.00 & 1.00 & 1.00 & 0.99 & 1.00 & 0.93 & 0.70 \\
       \midrule
 
-      \multirow{3}{*}{C9}
+      \multirow{3}{*}{C11}
         & accuracy  & 0.99 & 0.84 & 1.00 & 0.99 & 0.67 & 0.75 & 1.00 & 0.98 & 0.97 & 1.00 & 0.95 & 0.57 \\
         & precision & 0.94 & 1.00 & 1.00 & 1.00 & 1.00 & 0.75 & 1.00 & 1.00 & 0.96 & 1.00 & 0.98 & 0.89 \\
         & recall    & 0.99 & 0.84 & 1.00 & 0.99 & 0.67 & 0.75 & 1.00 & 0.98 & 0.97 & 1.00 & 0.95 & 0.57 \\
-      \bottomrule
+      \midrule
+
+      \multirow{3}{*}{C12}
+        & accuracy  & 0.97 & 0.99 & 1.00 & 1.00 & 0.88 & 0.97 & 1.00 & 1.00 & 0.92 & 1.00 & 0.95 & 1.00 \\
+        & precision & 0.82 & 0.94 & 1.00 & 1.00 & 0.98 & 0.98 & 1.00 & 1.00 & 1.00 & 1.00 & 0.98 & 0.99 \\
+        & recall    & 0.97 & 0.99 & 1.00 & 1.00 & 0.88 & 0.97 & 1.00 & 1.00 & 0.92 & 1.00 & 0.95 & 1.00 \\
+    \bottomrule
   \end{tabular}
   \caption{Per-class performance for SVC (rounded to 2 decimals)}
+  \label{tab:table4}
 \end{table*}
 
 \begin{table*}  [h]
@@ -301,25 +317,32 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
       ID & category & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\
       \midrule
 
-      \multirow{3}{*}{C10}
+      \multirow{3}{*}{C13}
         & accuracy  & 1.00 & 0.84 & 1.00 & 1.00 & 0.67 & 0.75 & 1.00 & 1.00 & 0.97 & 1.00 & 0.97 & 0.90 \\
         & precision & 0.96 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 0.96 & 1.00 & 0.99 & 0.96 \\
         & recall    & 1.00 & 0.84 & 1.00 & 1.00 & 0.67 & 0.75 & 1.00 & 1.00 & 0.97 & 1.00 & 0.97 & 0.90 \\
       \midrule
 
-      \multirow{3}{*}{C11}
+      \multirow{3}{*}{C14}
         & accuracy  & 0.98 & 0.82 & 1.00 & 1.00 & 1.00 & 0.00 & 1.00 & 1.00 & 1.00 & 1.00 & 0.97 & 0.95 \\
         & precision & 0.97 & 1.00 & 1.00 & 1.00 & 1.00 & 0.00 & 1.00 & 1.00 & 0.96 & 1.00 & 0.98 & 0.90 \\
         & recall    & 0.98 & 0.82 & 1.00 & 1.00 & 1.00 & 0.00 & 1.00 & 1.00 & 1.00 & 1.00 & 0.97 & 0.95 \\
       \midrule
 
-      \multirow{3}{*}{C12}
+      \multirow{3}{*}{C15}
         & accuracy  & 0.99 & 0.84 & 1.00 & 1.00 & 0.67 & 0.75 & 1.00 & 0.99 & 0.97 & 1.00 & 0.97 & 0.67 \\
         & precision & 0.96 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 0.99 & 0.96 & 1.00 & 0.98 & 0.87 \\
         & recall    & 0.99 & 0.84 & 1.00 & 1.00 & 0.67 & 0.75 & 1.00 & 0.99 & 0.97 & 1.00 & 0.97 & 0.67 \\
-      \bottomrule
+      \midrule
+
+      \multirow{3}{*}{C16}
+        & accuracy  & 0.97 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 0.93 & 1.00 & 0.97 & 1.00 \\
+        & precision & 0.97 & 0.94 & 1.00 & 1.00 & 0.99 & 0.99 & 1.00 & 1.00 & 0.99 & 1.00 & 0.98 & 1.00 \\
+        & recall    & 0.97 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 0.93 & 1.00 & 0.97 & 1.00 \\
+    \bottomrule
   \end{tabular}
   \caption{Per-class performance for Neural Network (rounded to 2 decimals)}
+  \label{tab:table5}
 \end{table*}
 
 
@@ -404,7 +427,7 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
 \begin{figure*}[h]
   \includegraphics[width=0.9\textwidth]{figures/figure7.png}
   \caption{
-        Results for the top-performing model configurations across batch sizes. Data was reduced to 10,000 instances of dos\_syn\_hping.
+        Results for the top-performing model configurations across batch sizes. Data was reduced to 10,000 instances from downsampling.
         (a) Training Loss (top-left). (b) Validation Loss (top-right).
         (c) Training F-score (bottom-left). (d) Validation F-score (bottom-right).
     }
@@ -416,7 +439,7 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
   \includegraphics[width=0.9\textwidth]{figures/figure8.png}
   \caption{
       Results for the top-performing model configurations across learning rates where dataset remained unmodified. 
-      (1e{-1}, 5e{-2}, 1e{-2}, 5e{-3}). Data was reduced to 10,000 instances of dos\_syn\_hping.
+      (1e{-1}, 5e{-2}, 1e{-2}, 5e{-3}). Data was reduced to 10,000 instances from downsampling.
       (a) Training Loss (top-left).
       (b) Validation Loss (top-right).
       (c) Training F-score (bottom-left).
@@ -430,13 +453,52 @@ Contribution Summary: For the code, I implemented training with hyperparameter t
   \includegraphics[width=0.9\textwidth]{figures/figure9.png}
   \caption{
       Results for the top-performing model configurations across maximum iteration counts
-      (2000, 5000, 10000, 50000). Data was reduced to 10,000 instances of dos\_syn\_hping.
+      (2000, 5000, 10000, 50000). Data was reduced to 10,000 instances from downsampling.
       (a) Training Loss (top-left).
       (b) Validation Loss (top-right).
       (c) Training F-score (bottom-left).
       (d) Validation F-score (bottom-right).
   }
   \label{fig:figure9}
+\end{figure*}
+\vspace{-4pt}
+
+\begin{figure*}[h]
+  \includegraphics[width=0.9\textwidth]{figures/figure16.png}
+  \caption{
+        Results for the top-performing model configurations across batch sizes. Data was reduced to 10,000 instances Data was reduced to 10,000 instances from upsampling.
+        (a) Training Loss (top-left). (b) Validation Loss (top-right).
+        (c) Training F-score (bottom-left). (d) Validation F-score (bottom-right).
+    }
+  \label{fig:figure16}
+\end{figure*}
+\vspace{-4pt} 
+
+\begin{figure*}[H]
+  \includegraphics[width=0.9\textwidth]{figures/figure17.png}
+  \caption{
+      Results for the top-performing model configurations across learning rates where dataset remained unmodified. 
+      (1e{-1}, 5e{-2}, 1e{-2}, 5e{-3}). Data was reduced to 10,000 instances from upsampling.
+      (a) Training Loss (top-left).
+      (b) Validation Loss (top-right).
+      (c) Training F-score (bottom-left).
+      (d) Validation F-score (bottom-right).
+  }
+  \label{fig:figure17}
+\end{figure*}
+\vspace{-4pt}
+
+\begin{figure*}[h]
+  \includegraphics[width=0.9\textwidth]{figures/figure18.png}
+  \caption{
+      Results for the top-performing model configurations across maximum iteration counts
+      (2000, 5000, 10000, 50000). Data was reduced to 10,000 instances from upsampling.
+      (a) Training Loss (top-left).
+      (b) Validation Loss (top-right).
+      (c) Training F-score (bottom-left).
+      (d) Validation F-score (bottom-right).
+  }
+  \label{fig:figure18}
 \end{figure*}
 \vspace{-4pt}
 
